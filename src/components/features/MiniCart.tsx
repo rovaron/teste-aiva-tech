@@ -141,7 +141,7 @@ function MiniCartItem({ item, onUpdateQuantity, onRemove }: MiniCartItemProps) {
 export function MiniCart({ 
   isOpen, 
   onClose, 
-  triggerRef
+  triggerRef: _triggerRef
 }: MiniCartProps) {
   const {
     items,

@@ -55,7 +55,7 @@ export function AddToCartButton({
   const [isPending, startTransition] = useTransition()
   const [isSuccess, setIsSuccess] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
-  const { addItem, toggleCart } = useCartStore()
+  const { addItem, toggleCart: _toggleCart } = useCartStore()
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.stopPropagation()

@@ -12,7 +12,6 @@ import {
   Trash2,
   ShoppingBag,
   ArrowRight,
-  Tag,
   Truck,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -190,7 +189,7 @@ export function CartDrawer() {
   const {
     items,
     isOpen,
-    toggleCart,
+    toggleCart: _toggleCart,
     updateQuantity,
     removeItem,
     clearCart,
@@ -237,7 +236,7 @@ export function CartDrawer() {
             initial='hidden'
             animate='visible'
             exit='exit'
-            onClick={toggleCart}
+            onClick={_toggleCart}
             className='fixed inset-0 z-[9998] bg-black/50 backdrop-blur-sm'
             aria-hidden='true'
           />
@@ -271,7 +270,7 @@ export function CartDrawer() {
                 <motion.button
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  onClick={toggleCart}
+                  onClick={_toggleCart}
                   className='p-2 hover:bg-muted rounded-md transition-colors'
                   aria-label='Fechar carrinho'
                 >
@@ -294,7 +293,7 @@ export function CartDrawer() {
                     <p className='text-muted-foreground mb-6 text-sm'>
                       Adicione produtos incríveis ao seu carrinho
                     </p>
-                    <Button onClick={toggleCart} className='w-full'>
+                    <Button onClick={_toggleCart} className='w-full'>
                       Continuar comprando
                     </Button>
                   </motion.div>
@@ -384,7 +383,7 @@ export function CartDrawer() {
                       <div className='space-y-2'>
                         <motion.div whileHover={buttonHover} whileTap={buttonTap}>
                           <Button asChild className='w-full' size='lg'>
-                            <Link href='/checkout' onClick={toggleCart}>
+                            <Link href='/checkout' onClick={_toggleCart}>
                               Finalizar compra
                               <ArrowRight className='ml-2 h-4 w-4' />
                             </Link>
@@ -394,7 +393,7 @@ export function CartDrawer() {
                         <div className='flex gap-2'>
                           <motion.div whileHover={buttonHover} whileTap={buttonTap} className='flex-1'>
                             <Button asChild variant='outline' className='w-full'>
-                              <Link href='/cart' onClick={toggleCart}>
+                              <Link href='/cart' onClick={_toggleCart}>
                                 Ver carrinho
                               </Link>
                             </Button>

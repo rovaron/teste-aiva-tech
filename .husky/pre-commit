@@ -1,4 +1,8 @@
 # Run type checking
+# Build project to avoid Next.js cache issues
+npm run build
+
+# Type checking
 npm run type-check
 
 # Run lint-staged (lint + prettier on staged files)
