@@ -23,6 +23,12 @@ const eslintConfig = [
       ],
     },
   },
+  {
+    files: ['**/*.test.{js,jsx,ts,tsx}', '**/__tests__/**/*.{js,jsx,ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
 ]
 
 export default eslintConfig

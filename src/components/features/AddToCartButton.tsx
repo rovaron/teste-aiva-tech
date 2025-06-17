@@ -138,7 +138,7 @@ export function AddToCartButton({
         <motion.button
           variants={buttonVariants}
           animate={buttonState}
-          whileTap='pressed'
+          whileTap={buttonVariants.pressed}
           transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
           <AnimatePresence mode='wait'>

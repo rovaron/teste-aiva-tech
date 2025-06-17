@@ -42,7 +42,7 @@ function ProductCard({ product }: { product: Product }) {
     <motion.div
       variants={cardVariants}
       initial='rest'
-      whileHover='hover'
+      whileHover={cardVariants.hover}
       className='group relative'
       style={{ viewTransitionName: `product-${product.id}` }}
     >

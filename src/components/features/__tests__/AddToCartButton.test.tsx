@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import { AddToCartButton } from '../AddToCartButton'
 import { useCartStore } from '@/stores/cart-store'
 import { Product } from '@/lib/types'
@@ -16,6 +16,13 @@ jest.mock('framer-motion', () => ({
     div: ({
       children,
       className,
+      whileHover,
+      whileTap,
+      variants,
+      initial,
+      animate,
+      exit,
+      transition,
       ...props
     }: {
       children: React.ReactNode
@@ -31,6 +38,13 @@ jest.mock('framer-motion', () => ({
     button: ({
       children,
       className,
+      whileHover,
+      whileTap,
+      variants,
+      initial,
+      animate,
+      exit,
+      transition,
       ...props
     }: {
       children: React.ReactNode
@@ -104,10 +118,13 @@ describe('AddToCartButton', () => {
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
-  it('calls addItem when clicked', () => {
+  it('calls addItem when clicked', async () => {
     render(<AddToCartButton product={mockProduct} />)
     const button = screen.getByRole('button')
-    fireEvent.click(button)
+
+    await act(async () => {
+      fireEvent.click(button)
+    })
 
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
@@ -142,11 +159,14 @@ describe('AddToCartButton', () => {
     expect(button).toHaveClass('w-full')
   })
 
-  it('handles products without images', () => {
+  it('handles products without images', async () => {
     const productWithoutImages = { ...mockProduct, images: [] }
     render(<AddToCartButton product={productWithoutImages} />)
     const button = screen.getByRole('button')
-    fireEvent.click(button)
+
+    await act(async () => {
+      fireEvent.click(button)
+    })
 
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
@@ -157,10 +177,13 @@ describe('AddToCartButton', () => {
     })
   })
 
-  it('uses custom quantity when provided', () => {
+  it('uses custom quantity when provided', async () => {
     render(<AddToCartButton product={mockProduct} quantity={3} />)
     const button = screen.getByRole('button')
-    fireEvent.click(button)
+
+    await act(async () => {
+      fireEvent.click(button)
+    })
 
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
@@ -171,7 +194,7 @@ describe('AddToCartButton', () => {
     })
   })
 
-  it('prevents event propagation on click', () => {
+  it('prevents event propagation on click', async () => {
     const parentClickHandler = jest.fn()
     render(
       <div onClick={parentClickHandler}>
@@ -180,7 +203,10 @@ describe('AddToCartButton', () => {
     )
 
     const button = screen.getByRole('button')
-    fireEvent.click(button)
+
+    await act(async () => {
+      fireEvent.click(button)
+    })
 
     expect(parentClickHandler).not.toHaveBeenCalled()
   })

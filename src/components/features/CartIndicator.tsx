@@ -139,8 +139,8 @@ export function CartIndicator({
         ref={buttonRef}
         variants={cartBounce}
         initial='idle'
-        whileHover='hover'
-        whileTap='tap'
+        whileHover={cartBounce.hover}
+        whileTap={cartBounce.tap}
         animate={shouldShake ? 'shake' : 'idle'}
         onClick={handleClick}
         className={cn(
