@@ -45,17 +45,20 @@ src/
 ## 🎯 Filosofia de Desenvolvimento
 
 ### Server Components First
+
 - Prioriza Server Components para melhor performance
 - Client Components apenas quando necessário
 - Hidratação mínima no cliente
 
 ### Performance Nativa
+
 - Cache strategies otimizadas (ISR, SSG)
 - Image optimization automática
 - Bundle splitting inteligente
 - Lazy loading de componentes
 
 ### TypeScript Strict
+
 - Tipagem rigorosa em todo o projeto
 - Validação com Zod
 - Type safety em runtime
@@ -63,12 +66,14 @@ src/
 ## 🛠️ Configurações de Performance
 
 ### Next.js Optimizations
+
 - **Image Optimization**: AVIF/WebP automático
 - **Bundle Optimization**: Code splitting otimizado
 - **Turbopack**: Build system ultra-rápido
 - **Experimental Features**: Package imports otimizados
 
 ### Cache Strategies
+
 - **Static Generation**: Para páginas de produtos
 - **Incremental Static Regeneration**: Para catálogo
 - **Server-side Rendering**: Para páginas dinâmicas
@@ -88,6 +93,7 @@ O projeto inclui um sistema completo de temas dark/light:
 ### Zustand Stores
 
 #### Cart Store (`useCartStore`)
+
 ```typescript
 // Adicionar item ao carrinho
 const { addItem } = useCartStore()
@@ -98,6 +104,7 @@ const totalItems = useCartStore(state => state.getTotalItems())
 ```
 
 #### UI Store (`useUIStore`)
+
 ```typescript
 // Controlar sidebar
 const { toggleSidebar } = useUIStore()
@@ -139,11 +146,13 @@ const handleSubmit = async (formData: FormData) => {
 ## 🎯 Componentes Principais
 
 ### Layout Components
+
 - **Header**: Navegação, busca, carrinho, tema
 - **Footer**: Links, informações, redes sociais
 - **ThemeToggle**: Alternador de tema
 
 ### Feature Components
+
 - Organizados por funcionalidade
 - Reutilizáveis e modulares
 - Props tipadas com TypeScript
