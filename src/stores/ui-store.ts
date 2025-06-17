@@ -26,18 +26,18 @@ interface UIStore {
 export const useUIStore = create<UIStore>((set, get) => ({
   // Sidebar
   sidebarOpen: false,
-  setSidebarOpen: (open) => set({ sidebarOpen: open }),
+  setSidebarOpen: open => set({ sidebarOpen: open }),
   toggleSidebar: () => set({ sidebarOpen: !get().sidebarOpen }),
 
   // Modals
   modals: {},
-  openModal: (modalId) => {
+  openModal: modalId => {
     set({ modals: { ...get().modals, [modalId]: true } })
   },
-  closeModal: (modalId) => {
+  closeModal: modalId => {
     set({ modals: { ...get().modals, [modalId]: false } })
   },
-  toggleModal: (modalId) => {
+  toggleModal: modalId => {
     const current = get().modals[modalId] || false
     set({ modals: { ...get().modals, [modalId]: !current } })
   },
@@ -51,6 +51,6 @@ export const useUIStore = create<UIStore>((set, get) => ({
 
   // Search
   searchQuery: '',
-  setSearchQuery: (query) => set({ searchQuery: query }),
+  setSearchQuery: query => set({ searchQuery: query }),
   clearSearch: () => set({ searchQuery: '' }),
 }))
