@@ -1,12 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { ShoppingCart, Search, Menu, User, LogOut } from 'lucide-react'
+import { Search, Menu, User, LogOut } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
-import { useCartStore } from '@/stores/cart-store'
 import { useUIStore } from '@/stores/ui-store'
 import { logout } from '@/actions/auth'
 import { useEffect, useState } from 'react'
+import { CartDrawer } from '@/components/features/CartDrawer'
+import { CartIndicator } from '@/components/features/CartIndicator'
 
 interface User {
   id: number
@@ -17,9 +18,7 @@ interface User {
 }
 
 export function Header() {
-  const { getTotalItems, toggleCart } = useCartStore()
   const { toggleSidebar, searchQuery, setSearchQuery } = useUIStore()
-  const totalItems = getTotalItems()
   const [user, setUser] = useState<User | null>(null)
   const [_isLoading, setIsLoading] = useState(true)
 
@@ -117,18 +116,7 @@ export function Header() {
         <div className='flex items-center space-x-2'>
           <ThemeToggle />
 
-          <button
-            onClick={toggleCart}
-            className='focus-visible:ring-ring ring-offset-background hover:bg-accent hover:text-accent-foreground relative inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50'
-          >
-            <ShoppingCart className='h-5 w-5' />
-            {totalItems > 0 && (
-              <span className='bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full text-xs'>
-                {totalItems}
-              </span>
-            )}
-            <span className='sr-only'>Carrinho</span>
-          </button>
+          <CartIndicator showLabel />
 
           {user ? (
             <div className='flex items-center space-x-2'>
@@ -161,6 +149,9 @@ export function Header() {
           )}
         </div>
       </div>
+      
+      {/* Cart Drawer */}
+      <CartDrawer />
     </header>
   )
 }

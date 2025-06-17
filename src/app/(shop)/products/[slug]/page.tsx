@@ -20,6 +20,7 @@ import {
   Clock,
 } from 'lucide-react'
 import { getProduct, getProducts, getProductBySlug } from '@/lib/api'
+import { AddToCartButton, FloatingAddToCart } from '@/components/features/AddToCartButton'
 
 
 interface ProductPageProps {
@@ -444,10 +445,25 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Actions */}
           <div className='space-y-3'>
             <div className='flex gap-3'>
-              <Button size='lg' className='flex-1' disabled={!product.inStock}>
-                <ShoppingCart className='mr-2 h-4 w-4' />
-                Adicionar ao carrinho
-              </Button>
+              <AddToCartButton
+                product={{
+                  id: product.id,
+                  title: product.name,
+                  slug: product.slug,
+                  price: product.price,
+                  description: product.description,
+                  images: product.images,
+                  category: {
+                    id: 1,
+                    name: product.category,
+                    slug: product.category.toLowerCase().replace(/\s+/g, '-'),
+                    image: ''
+                  }
+                }}
+                size='lg'
+                className='flex-1'
+                fullWidth
+              />
 
               <Button size='lg' variant='outline'>
                 <Heart className='h-4 w-4' />
@@ -462,6 +478,24 @@ export default async function ProductPage({ params }: ProductPageProps) {
               Comprar agora
             </Button>
           </div>
+
+          {/* Floating Add to Cart for Mobile */}
+          <FloatingAddToCart
+            product={{
+              id: product.id,
+              title: product.name,
+              slug: product.slug,
+              price: product.price,
+              description: product.description,
+              images: product.images,
+              category: {
+                id: 1,
+                name: product.category,
+                slug: product.category.toLowerCase().replace(/\s+/g, '-'),
+                image: ''
+              }
+            }}
+          />
 
           {/* Benefits */}
           <Card>

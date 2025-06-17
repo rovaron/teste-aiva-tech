@@ -315,7 +315,7 @@ export async function getProductsByCategory(categoryId: string) {
 export async function getFeaturedProducts() {
   try {
     // Get first 8 products as featured (API doesn't have featured flag)
-    const products = await getProducts({ limit: '8' })
+    const products = await getProducts({ limit: 8 })
     return {
       success: true,
       data: products,
