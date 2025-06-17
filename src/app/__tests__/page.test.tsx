@@ -10,14 +10,22 @@ jest.mock('next/navigation', () => ({
     back: jest.fn(),
     forward: jest.fn(),
     refresh: jest.fn(),
-    prefetch: jest.fn()
+    prefetch: jest.fn(),
   }),
-  usePathname: () => '/'
+  usePathname: () => '/',
 }))
 
 // Mock next/link
 jest.mock('next/link', () => {
-  const MockLink = ({ children, href, ...props }: { children: React.ReactNode; href: string; [key: string]: unknown }) => {
+  const MockLink = ({
+    children,
+    href,
+    ...props
+  }: {
+    children: React.ReactNode
+    href: string
+    [key: string]: unknown
+  }) => {
     return (
       <a href={href} {...props}>
         {children}

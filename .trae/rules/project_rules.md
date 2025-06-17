@@ -1,6 +1,7 @@
 ## 🎨 Padrões de Motion e Animações
 
 ### Princípios de Animação
+
 - **Performance First**: 60fps sempre, use transform e opacity
 - **Significado**: toda animação deve ter propósito (feedback, hierarquia, flow)
 - **Consistência**: mesma linguagem de movimento em todo o app
@@ -10,6 +11,7 @@
 ### Transições Obrigatórias
 
 #### Page Transitions (App Router)
+
 ```tsx
 // layout.tsx - Template para transições de página
 export default function Template({ children }: { children: React.ReactNode }) {
@@ -18,9 +20,9 @@ export default function Template({ children }: { children: React.ReactNode }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      transition={{ 
-        duration: 0.3, 
-        ease: [0.4, 0.0, 0.2, 1] // easeOutCubic
+      transition={{
+        duration: 0.3,
+        ease: [0.4, 0.0, 0.2, 1], // easeOutCubic
       }}
     >
       {children}
@@ -30,24 +32,26 @@ export default function Template({ children }: { children: React.ReactNode }) {
 ```
 
 #### Component Entrance Animations
+
 ```tsx
 // Padrão para componentes que entram na tela
 const slideUp = {
   initial: { opacity: 0, y: 60 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, ease: [0.4, 0.0, 0.2, 1] }
+  transition: { duration: 0.6, ease: [0.4, 0.0, 0.2, 1] },
 }
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 }
 ```
 
 #### Loading States
+
 ```tsx
 // Skeleton loading com pulse suave
 const skeletonPulse = {
@@ -56,32 +60,31 @@ const skeletonPulse = {
     transition: {
       duration: 1.5,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
+      ease: 'easeInOut',
+    },
+  },
 }
 ```
 
 ### Tipos de Animação por Contexto
 
 #### E-commerce Específicas
-- **Add to Cart**: 
+
+- **Add to Cart**:
   - Item escala (1 → 1.05 → 1) + carrinho balança
   - Feedback tátil no mobile (vibration)
-  
 - **Product Image Gallery**:
   - Swipe com spring physics
   - Zoom com gesture handling
-  
 - **Filters/Search**:
   - Results com stagger animation
   - Loading spinner customizado
-  
 - **Checkout Steps**:
   - Slide lateral entre etapas
   - Progress bar animada
 
 #### UI Component Animations
+
 ```tsx
 // Button hover/press states
 const buttonVariants = {
@@ -93,9 +96,9 @@ const buttonVariants = {
 // Modal/Dialog entrance
 const modalVariants = {
   hidden: { opacity: 0, scale: 0.95, y: 20 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
+  visible: {
+    opacity: 1,
+    scale: 1,
     y: 0,
     transition: { type: "spring", damping: 25, stiffness: 500 }
   }
@@ -135,11 +138,14 @@ Desenvolver soluções de e-commerce seguindo os mais altos padrões de performa
 ### 2. Aprovação de Task
 Após completar uma task, SEMPRE pergunte:
 ```
+
 ✅ Task concluída! A implementação está aprovada para commit?
+
 - [Descreva brevemente o que foi implementado]
 - [Mencione melhorias de performance aplicadas]
 - [Mencione otimizações de SEO implementadas]
-```
+
+````
 
 ### 3. Commit Semântico (Após Aprovação)
 Execute commit seguindo Conventional Commits:
@@ -148,19 +154,22 @@ git add .
 git commit -m "tipo(escopo): descrição concisa da implementação
 
 - Detalhe das funcionalidades adicionadas
-- Melhorias de performance implementadas  
+- Melhorias de performance implementadas
 - Otimizações de SEO aplicadas
 - Outras melhorias relevantes"
-```
+````
 
 ### 4. Desenvolvimento de Testes
+
 Após o commit da funcionalidade:
+
 - Desenvolva testes automatizados completos
 - Cubra casos de uso principais e edge cases
 - Inclua testes de performance quando relevante
 - Teste acessibilidade e SEO quando aplicável
 
 ### 5. Commit de Testes
+
 ```bash
 git add .
 git commit -m "test(escopo): adiciona testes para [funcionalidade]
@@ -174,6 +183,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 ## 🚀 Padrões de Performance
 
 ### Core Web Vitals
+
 - **LCP (Largest Contentful Paint)**: < 2.5s
 - **FID (First Input Delay)**: < 100ms
 - **CLS (Cumulative Layout Shift)**: < 0.1
@@ -181,6 +191,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **TTI (Time to Interactive)**: < 3.5s
 
 ### Otimizações Obrigatórias
+
 - Lazy loading para imagens e componentes
 - Code splitting por rotas e funcionalidades
 - Compressão de assets (Gzip/Brotli)
@@ -191,6 +202,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - Tree shaking para remover código não utilizado
 
 ### Performance de E-commerce
+
 - Carregamento assíncrono do carrinho
 - Debounce em buscas e filtros
 - Paginação virtual para listas grandes
@@ -201,6 +213,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 ## 🔍 Padrões de SEO
 
 ### SEO Técnico
+
 - **Meta tags**: title, description, keywords
 - **Open Graph**: og:title, og:description, og:image, og:type
 - **Twitter Cards**: twitter:card, twitter:title, twitter:description
@@ -211,6 +224,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **Robots.txt**: configurado corretamente
 
 ### SEO para E-commerce
+
 - **Structured Data**: Product, Offer, Review, Rating, Organization
 - **Breadcrumbs**: navegação hierárquica
 - **URLs amigáveis**: /categoria/subcategoria/produto
@@ -220,6 +234,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **Mobile-first**: design responsivo
 
 ### Content SEO
+
 - Títulos H1 únicos por página
 - Hierarquia de headings (H1-H6)
 - Descrições de produtos únicas
@@ -230,6 +245,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 ## 🛒 Padrões de E-commerce
 
 ### UX/UI Essenciais
+
 - **Carrinho persistente**: mantém itens entre sessões
 - **Checkout rápido**: máximo 3 etapas
 - **Busca inteligente**: autocomplete, filtros, sugestões
@@ -239,6 +255,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **Zoom de imagens**: visualização detalhada
 
 ### Funcionalidades Técnicas
+
 - **Inventory management**: controle de estoque
 - **Payment integration**: múltiplas formas de pagamento
 - **Shipping calculator**: cálculo de frete
@@ -248,6 +265,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **PWA**: Progressive Web App
 
 ### Analytics e Tracking
+
 - **Google Analytics 4**: e-commerce tracking
 - **Google Tag Manager**: gerenciamento de tags
 - **Facebook Pixel**: tracking de conversões
@@ -258,6 +276,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 ## 🧪 Padrões de Teste
 
 ### Tipos de Teste Obrigatórios
+
 - **Unit Tests**: componentes isolados
 - **Integration Tests**: fluxos completos
 - **E2E Tests**: jornadas de usuário
@@ -266,12 +285,14 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - **SEO Tests**: meta tags, structured data
 
 ### Cobertura Mínima
+
 - **Código**: 80% de cobertura
 - **Funcionalidades críticas**: 100% (checkout, pagamento)
 - **Componentes reutilizáveis**: 90%
 - **Utils e helpers**: 95%
 
 ### Ferramentas de Teste
+
 - **Jest**: testes unitários
 - **React Testing Library**: testes de componentes
 - **Cypress/Playwright**: testes E2E
@@ -281,6 +302,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 ## 📝 Padrões de Commit
 
 ### Tipos de Commit
+
 - `feat`: nova funcionalidade
 - `fix`: correção de bug
 - `perf`: melhoria de performance
@@ -292,6 +314,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - `chore`: tarefas de manutenção
 
 ### Escopos Sugeridos
+
 - `product`: páginas/funcionalidades de produto
 - `cart`: carrinho de compras
 - `checkout`: processo de checkout
@@ -304,6 +327,7 @@ git commit -m "test(escopo): adiciona testes para [funcionalidade]
 - `core`: funcionalidades base
 
 ### Exemplo de Commit Perfeito
+
 ```bash
 feat(product): implementa zoom de imagem com lazy loading
 
@@ -321,6 +345,7 @@ SEO: Structured data para imagens implementado
 ## ⚡ Checklist de Qualidade
 
 ### Antes do Commit
+
 - [ ] Performance: Core Web Vitals otimizados
 - [ ] SEO: Meta tags e structured data implementados
 - [ ] Acessibilidade: WCAG 2.1 AA compliance
@@ -330,6 +355,7 @@ SEO: Structured data para imagens implementado
 - [ ] Security: vulnerabilidades verificadas
 
 ### Antes dos Testes
+
 - [ ] Casos de uso principais cobertos
 - [ ] Edge cases identificados e testados
 - [ ] Performance tests para funcionalidades críticas
@@ -340,18 +366,21 @@ SEO: Structured data para imagens implementado
 ## 🔧 Ferramentas Recomendadas
 
 ### Performance
+
 - Lighthouse CI
 - WebPageTest
 - GTmetrix
 - Core Web Vitals Chrome Extension
 
 ### SEO
+
 - Google Search Console
 - Screaming Frog
 - SEMrush/Ahrefs
 - Structured Data Testing Tool
 
 ### Desenvolvimento
+
 - ESLint + Prettier
 - Husky (git hooks)
 - Commitizen (commits padronizados)
@@ -360,18 +389,21 @@ SEO: Structured data para imagens implementado
 ## 🎯 Métricas de Sucesso
 
 ### Performance KPIs
+
 - Lighthouse Score: > 90 (todas as categorias)
 - Core Web Vitals: todos dentro do verde
 - Bundle Size: < 250KB inicial
 - Time to Interactive: < 3s
 
 ### SEO KPIs
+
 - Structured Data: 100% coverage
 - Meta Tags: 100% coverage
 - Page Speed Score: > 90
 - Mobile Usability: 100% sem erros
 
 ### Qualidade KPIs
+
 - Test Coverage: > 80%
 - ESLint Errors: 0
 - TypeScript Errors: 0
@@ -382,6 +414,7 @@ SEO: Structured data para imagens implementado
 ## 🚨 Lembrete Final
 
 **SEMPRE siga este fluxo:**
+
 1. ✅ Implementar com foco em performance e SEO
 2. ❓ Perguntar se a task foi aprovada
 3. 📝 Fazer commit semântico da funcionalidade

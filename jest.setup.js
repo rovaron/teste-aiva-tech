@@ -6,23 +6,27 @@ beforeAll(() => {
   console.error = (...args) => {
     if (
       typeof args[0] === 'string' &&
-      (
-        args[0].includes('Warning: ReactDOM.render is deprecated') ||
+      (args[0].includes('Warning: ReactDOM.render is deprecated') ||
         args[0].includes('Warning: React.createFactory() is deprecated') ||
-        args[0].includes('Warning: componentWillReceiveProps has been renamed') ||
+        args[0].includes(
+          'Warning: componentWillReceiveProps has been renamed'
+        ) ||
         args[0].includes('Warning: componentWillMount has been renamed') ||
         args[0].includes('Warning: componentWillUpdate has been renamed') ||
         args[0].includes('Warning: Failed prop type') ||
-        args[0].includes('Warning: Each child in a list should have a unique "key" prop') ||
+        args[0].includes(
+          'Warning: Each child in a list should have a unique "key" prop'
+        ) ||
         args[0].includes('Warning: validateDOMNesting') ||
         args[0].includes('Warning: React does not recognize') ||
         args[0].includes('Warning: Unknown event handler property') ||
-        args[0].includes('Warning: Received `true` for a non-boolean attribute') ||
+        args[0].includes(
+          'Warning: Received `true` for a non-boolean attribute'
+        ) ||
         args[0].includes('Warning: Using UNSAFE_') ||
-        args[0].includes('Warning: Can\'t perform a React state update') ||
+        args[0].includes("Warning: Can't perform a React state update") ||
         args[0].includes('Warning: forwardRef render functions') ||
-        args[0].includes('Warning: Function components cannot be given refs')
-      )
+        args[0].includes('Warning: Function components cannot be given refs'))
     ) {
       return
     }

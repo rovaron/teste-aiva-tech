@@ -8,7 +8,7 @@ describe('UI Store', () => {
       sidebarOpen: false,
       modals: {},
       loading: {},
-      searchQuery: ''
+      searchQuery: '',
     })
   })
 

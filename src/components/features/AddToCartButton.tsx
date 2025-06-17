@@ -23,14 +23,14 @@ const buttonVariants = {
   rest: { scale: 1 },
   hover: { scale: 1.02 },
   pressed: { scale: 0.98 },
-  success: { scale: 1.05 }
+  success: { scale: 1.05 },
 }
 
 const iconVariants = {
   rest: { rotate: 0, scale: 1 },
   hover: { rotate: -10, scale: 1.1 },
   pressed: { rotate: 0, scale: 0.9 },
-  success: { rotate: 360, scale: 1.2 }
+  success: { rotate: 360, scale: 1.2 },
 }
 
 const cartBounce = {
@@ -38,9 +38,9 @@ const cartBounce = {
     y: [0, -8, 0],
     transition: {
       duration: 0.6,
-      ease: [0.4, 0.0, 0.2, 1]
-    }
-  }
+      ease: [0.4, 0.0, 0.2, 1],
+    },
+  },
 }
 
 export function AddToCartButton({
@@ -50,7 +50,7 @@ export function AddToCartButton({
   size = 'default',
   className,
   showIcon = true,
-  fullWidth = false
+  fullWidth = false,
 }: AddToCartButtonProps) {
   const [isPending, startTransition] = useTransition()
   const [isSuccess, setIsSuccess] = useState(false)
@@ -69,7 +69,7 @@ export function AddToCartButton({
           name: product.title,
           slug: product.slug,
           price: product.price,
-          image: product.images[0]
+          image: product.images[0],
         })
 
         // Server action for persistence
@@ -100,8 +100,20 @@ export function AddToCartButton({
     })
   }
 
-  const buttonState = isPending ? 'pressed' : isSuccess ? 'success' : isHovered ? 'hover' : 'rest'
-  const iconState = isPending ? 'pressed' : isSuccess ? 'success' : isHovered ? 'hover' : 'rest'
+  const buttonState = isPending
+    ? 'pressed'
+    : isSuccess
+      ? 'success'
+      : isHovered
+        ? 'hover'
+        : 'rest'
+  const iconState = isPending
+    ? 'pressed'
+    : isSuccess
+      ? 'success'
+      : isHovered
+        ? 'hover'
+        : 'rest'
 
   return (
     <motion.div
@@ -126,50 +138,50 @@ export function AddToCartButton({
         <motion.button
           variants={buttonVariants}
           animate={buttonState}
-          whileTap="pressed"
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          whileTap='pressed'
+          transition={{ type: 'spring', stiffness: 400, damping: 25 }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode='wait'>
             {isPending ? (
               <motion.div
-                key="loading"
+                key='loading'
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
               >
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className='h-4 w-4 animate-spin' />
                 <span>Adicionando...</span>
               </motion.div>
             ) : isSuccess ? (
               <motion.div
-                key="success"
+                key='success'
                 initial={{ opacity: 0, scale: 0.8, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.8, y: -10 }}
                 transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
               >
-                <Check className="h-4 w-4" />
+                <Check className='h-4 w-4' />
                 <span>Adicionado!</span>
               </motion.div>
             ) : (
               <motion.div
-                key="default"
+                key='default'
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.8 }}
                 transition={{ duration: 0.2 }}
-                className="flex items-center gap-2"
+                className='flex items-center gap-2'
               >
                 {showIcon && (
                   <motion.div
                     variants={iconVariants}
                     animate={iconState}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                   >
-                    <ShoppingCart className="h-4 w-4" />
+                    <ShoppingCart className='h-4 w-4' />
                   </motion.div>
                 )}
                 <span>Adicionar ao Carrinho</span>
@@ -184,8 +196,8 @@ export function AddToCartButton({
                 initial={{ scale: 0, opacity: 0.6 }}
                 animate={{ scale: 4, opacity: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="absolute inset-0 bg-green-500 rounded-md"
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                className='absolute inset-0 rounded-md bg-green-500'
                 style={{ zIndex: -1 }}
               />
             )}
@@ -199,7 +211,7 @@ export function AddToCartButton({
 // Quick add variant for product grids
 export function QuickAddButton({
   product,
-  className
+  className,
 }: {
   product: Product
   className?: string
@@ -207,11 +219,11 @@ export function QuickAddButton({
   return (
     <AddToCartButton
       product={product}
-      variant="outline"
-      size="sm"
+      variant='outline'
+      size='sm'
       showIcon={true}
       className={cn(
-        'absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200',
+        'absolute right-4 bottom-4 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
         className
       )}
     />
@@ -221,7 +233,7 @@ export function QuickAddButton({
 // Floating add to cart for product pages
 export function FloatingAddToCart({
   product,
-  quantity = 1
+  quantity = 1,
 }: {
   product: Product
   quantity?: number
@@ -230,15 +242,15 @@ export function FloatingAddToCart({
     <motion.div
       initial={{ y: 100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed bottom-4 left-4 right-4 z-50 md:hidden"
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className='fixed right-4 bottom-4 left-4 z-50 md:hidden'
     >
       <AddToCartButton
         product={product}
         quantity={quantity}
-        size="lg"
+        size='lg'
         fullWidth
-        className="shadow-lg"
+        className='shadow-lg'
       />
     </motion.div>
   )

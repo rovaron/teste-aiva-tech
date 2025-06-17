@@ -6,21 +6,45 @@ import { Product } from '@/lib/types'
 
 // Mock the cart store
 jest.mock('@/stores/cart-store')
-const mockUseCartStore = useCartStore as jest.MockedFunction<typeof useCartStore>
+const mockUseCartStore = useCartStore as jest.MockedFunction<
+  typeof useCartStore
+>
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, className, ...props }: any) => {
-      const { variants, animate, initial, exit, transition, whileTap, ...domProps } = props
-      return <div className={className} {...domProps}>{children}</div>
+    div: ({
+      children,
+      className,
+      ...props
+    }: {
+      children: React.ReactNode
+      className?: string
+      [key: string]: unknown
+    }) => {
+      return (
+        <div className={className} {...props}>
+          {children}
+        </div>
+      )
     },
-    button: ({ children, className, ...props }: any) => {
-      const { variants, animate, initial, exit, transition, whileTap, ...domProps } = props
-      return <button className={className} {...domProps}>{children}</button>
+    button: ({
+      children,
+      className,
+      ...props
+    }: {
+      children: React.ReactNode
+      className?: string
+      [key: string]: unknown
+    }) => {
+      return (
+        <button className={className} {...props}>
+          {children}
+        </button>
+      )
     },
   },
-  AnimatePresence: ({ children }: any) => children,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 // Mock the cart action
@@ -36,15 +60,15 @@ jest.mock('react', () => ({
 
 // Mock lucide-react icons
 jest.mock('lucide-react', () => ({
-  ShoppingCart: () => <div data-testid="shopping-cart-icon" />,
-  Check: () => <div data-testid="check-icon" />,
-  Loader2: () => <div data-testid="loader-icon" />,
+  ShoppingCart: () => <div data-testid='shopping-cart-icon' />,
+  Check: () => <div data-testid='check-icon' />,
+  Loader2: () => <div data-testid='loader-icon' />,
 }))
 
 describe('AddToCartButton', () => {
   const mockAddItem = jest.fn()
   const mockToggleCart = jest.fn()
-  
+
   const mockProduct: Product = {
     id: 1,
     title: 'Test Product',
@@ -84,7 +108,7 @@ describe('AddToCartButton', () => {
     render(<AddToCartButton product={mockProduct} />)
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
       name: 'Test Product',
@@ -95,19 +119,19 @@ describe('AddToCartButton', () => {
   })
 
   it('applies variant classes correctly', () => {
-    render(<AddToCartButton product={mockProduct} variant="outline" />)
+    render(<AddToCartButton product={mockProduct} variant='outline' />)
     const button = screen.getByRole('button')
     expect(button).toHaveClass('relative', 'overflow-hidden')
   })
 
   it('applies size classes correctly', () => {
-    render(<AddToCartButton product={mockProduct} size="lg" />)
+    render(<AddToCartButton product={mockProduct} size='lg' />)
     const button = screen.getByRole('button')
     expect(button).toHaveClass('relative', 'overflow-hidden')
   })
 
   it('applies custom className', () => {
-    render(<AddToCartButton product={mockProduct} className="custom-class" />)
+    render(<AddToCartButton product={mockProduct} className='custom-class' />)
     const button = screen.getByRole('button')
     expect(button).toHaveClass('custom-class')
   })
@@ -123,7 +147,7 @@ describe('AddToCartButton', () => {
     render(<AddToCartButton product={productWithoutImages} />)
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
       name: 'Test Product',
@@ -137,7 +161,7 @@ describe('AddToCartButton', () => {
     render(<AddToCartButton product={mockProduct} quantity={3} />)
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(mockAddItem).toHaveBeenCalledWith({
       id: '1',
       name: 'Test Product',
@@ -154,10 +178,10 @@ describe('AddToCartButton', () => {
         <AddToCartButton product={mockProduct} />
       </div>
     )
-    
+
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(parentClickHandler).not.toHaveBeenCalled()
   })
 })

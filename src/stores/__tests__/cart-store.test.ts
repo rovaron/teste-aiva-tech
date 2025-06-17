@@ -3,7 +3,7 @@ import { useCartStore } from '../cart-store'
 
 // Mock zustand persist
 jest.mock('zustand/middleware', () => ({
-  persist: (fn: unknown) => fn
+  persist: (fn: unknown) => fn,
 }))
 
 describe('Cart Store', () => {
@@ -11,7 +11,7 @@ describe('Cart Store', () => {
     // Reset store before each test
     useCartStore.setState({
       items: [],
-      isOpen: false
+      isOpen: false,
     })
   })
 
@@ -23,7 +23,7 @@ describe('Cart Store', () => {
         name: 'Test Product',
         slug: 'test-product',
         price: 29.99,
-        image: 'test.jpg'
+        image: 'test.jpg',
       }
 
       act(() => {
@@ -33,7 +33,7 @@ describe('Cart Store', () => {
       expect(result.current.items).toHaveLength(1)
       expect(result.current.items[0]).toEqual({
         ...newItem,
-        quantity: 1
+        quantity: 1,
       })
     })
 
@@ -43,7 +43,7 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product',
         slug: 'test-product',
-        price: 29.99
+        price: 29.99,
       }
 
       act(() => {
@@ -63,7 +63,7 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product',
         slug: 'test-product',
-        price: 29.99
+        price: 29.99,
       }
 
       act(() => {
@@ -80,7 +80,7 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product',
         slug: 'test-product',
-        price: 29.99
+        price: 29.99,
       }
 
       act(() => {
@@ -99,7 +99,7 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product',
         slug: 'test-product',
-        price: 29.99
+        price: 29.99,
       }
 
       act(() => {
@@ -116,7 +116,7 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product',
         slug: 'test-product',
-        price: 29.99
+        price: 29.99,
       }
 
       act(() => {
@@ -135,13 +135,13 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product 1',
         slug: 'test-product-1',
-        price: 29.99
+        price: 29.99,
       }
       const item2 = {
         id: '2',
         name: 'Test Product 2',
         slug: 'test-product-2',
-        price: 39.99
+        price: 39.99,
       }
 
       act(() => {
@@ -181,13 +181,13 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product 1',
         slug: 'test-product-1',
-        price: 29.99
+        price: 29.99,
       }
       const item2 = {
         id: '2',
         name: 'Test Product 2',
         slug: 'test-product-2',
-        price: 39.99
+        price: 39.99,
       }
 
       act(() => {
@@ -212,13 +212,13 @@ describe('Cart Store', () => {
         id: '1',
         name: 'Test Product 1',
         slug: 'test-product-1',
-        price: 10.00
+        price: 10.0,
       }
       const item2 = {
         id: '2',
         name: 'Test Product 2',
         slug: 'test-product-2',
-        price: 20.00
+        price: 20.0,
       }
 
       act(() => {
@@ -229,7 +229,7 @@ describe('Cart Store', () => {
         // Total: 40.00
       })
 
-      expect(result.current.getTotalPrice()).toBe(40.00)
+      expect(result.current.getTotalPrice()).toBe(40.0)
     })
 
     it('should return 0 for empty cart', () => {

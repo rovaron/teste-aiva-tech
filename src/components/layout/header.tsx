@@ -149,7 +149,7 @@ export function Header() {
           )}
         </div>
       </div>
-      
+
       {/* Cart Drawer */}
       <CartDrawer />
     </header>

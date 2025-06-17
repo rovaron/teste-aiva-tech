@@ -5,13 +5,11 @@ import { Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Star,
   Heart,
   Share2,
-  ShoppingCart,
   Truck,
   Shield,
   RotateCcw,
@@ -19,9 +17,11 @@ import {
   Eye,
   Clock,
 } from 'lucide-react'
-import { getProduct, getProducts, getProductBySlug } from '@/lib/api'
-import { AddToCartButton, FloatingAddToCart } from '@/components/features/AddToCartButton'
-
+import { getProducts, getProductBySlug } from '@/lib/api'
+import {
+  AddToCartButton,
+  FloatingAddToCart,
+} from '@/components/features/AddToCartButton'
 
 interface ProductPageProps {
   params: Promise<{
@@ -74,69 +74,74 @@ const transformApiProduct = (apiProduct: ApiProduct): Product => {
   const mockReviews = Math.floor(Math.random() * 500) + 50 // Random reviews 50-550
   const mockStockCount = Math.floor(Math.random() * 50) + 1 // Random stock 1-50
   const mockViews = Math.floor(Math.random() * 2000) + 100 // Random views 100-2100
-  
+
   // Generate features based on category
   const generateFeatures = (categoryName: string): string[] => {
     const featureMap: Record<string, string[]> = {
-      'Electronics': [
+      Electronics: [
         'High-quality materials',
         'Advanced technology',
         'Energy efficient',
         'Durable construction',
-        'User-friendly design'
+        'User-friendly design',
       ],
-      'Clothes': [
+      Clothes: [
         'Premium fabric',
         'Comfortable fit',
         'Machine washable',
         'Breathable material',
-        'Stylish design'
+        'Stylish design',
       ],
-      'Furniture': [
+      Furniture: [
         'Solid construction',
         'Easy assembly',
         'Space-saving design',
         'Durable materials',
-        'Modern style'
-      ]
+        'Modern style',
+      ],
     }
     return featureMap[categoryName] || featureMap['Electronics']
   }
-  
+
   // Generate specifications based on category
-  const generateSpecifications = (categoryName: string): Record<string, string> => {
+  const generateSpecifications = (
+    categoryName: string
+  ): Record<string, string> => {
     const specMap: Record<string, Record<string, string>> = {
-      'Electronics': {
-        'Brand': 'Premium Brand',
-        'Warranty': '2 years',
-        'Power': 'AC/DC',
-        'Dimensions': '25 x 15 x 10 cm'
+      Electronics: {
+        Brand: 'Premium Brand',
+        Warranty: '2 years',
+        Power: 'AC/DC',
+        Dimensions: '25 x 15 x 10 cm',
       },
-      'Clothes': {
-        'Material': '100% Cotton',
-        'Care': 'Machine wash cold',
-        'Fit': 'Regular',
-        'Origin': 'Made in USA'
+      Clothes: {
+        Material: '100% Cotton',
+        Care: 'Machine wash cold',
+        Fit: 'Regular',
+        Origin: 'Made in USA',
       },
-      'Furniture': {
-        'Material': 'Solid Wood',
-        'Assembly': 'Required',
-        'Weight': '15 kg',
-        'Finish': 'Natural'
-      }
+      Furniture: {
+        Material: 'Solid Wood',
+        Assembly: 'Required',
+        Weight: '15 kg',
+        Finish: 'Natural',
+      },
     }
     return specMap[categoryName] || specMap['Electronics']
   }
-  
+
   return {
     id: apiProduct.id,
     name: apiProduct.title,
     slug: apiProduct.slug,
     price: apiProduct.price,
     originalPrice: apiProduct.price * 1.2, // Mock original price (20% higher)
-    images: apiProduct.images.length > 0 ? apiProduct.images : [
-      'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=600&fit=crop'
-    ],
+    images:
+      apiProduct.images.length > 0
+        ? apiProduct.images
+        : [
+            'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=600&fit=crop',
+          ],
     rating: Math.round(mockRating * 10) / 10,
     reviews: mockReviews,
     category: apiProduct.category.name,
@@ -148,7 +153,7 @@ const transformApiProduct = (apiProduct: ApiProduct): Product => {
     stockCount: mockStockCount,
     views: mockViews,
     lastUpdated: apiProduct.updatedAt,
-    relatedProducts: [] // Will be populated separately
+    relatedProducts: [], // Will be populated separately
   }
 }
 
@@ -163,9 +168,15 @@ const getProductData = async (slug: string): Promise<Product | null> => {
   }
 }
 // Fetch related products from API
-const getRelatedProducts = async (categoryId: number, currentProductId: number): Promise<Product[]> => {
+const getRelatedProducts = async (
+  categoryId: number,
+  currentProductId: number
+): Promise<Product[]> => {
   try {
-    const products: ApiProduct[] = await getProducts({ categoryId: categoryId.toString(), limit: 4 })
+    const products: ApiProduct[] = await getProducts({
+      categoryId: categoryId.toString(),
+      limit: 4,
+    })
     return products
       .filter(p => p.id !== currentProductId)
       .slice(0, 3)
@@ -176,13 +187,12 @@ const getRelatedProducts = async (categoryId: number, currentProductId: number):
   }
 }
 
-
 // ISR: Gera páginas estáticas para produtos populares
 export async function generateStaticParams() {
   try {
     // Fetch first 10 products for static generation
     const products: ApiProduct[] = await getProducts({ limit: 10 })
-    return products.map((product) => ({
+    return products.map(product => ({
       slug: product.slug || `product-${product.id}`,
     }))
   } catch (error) {
@@ -191,7 +201,7 @@ export async function generateStaticParams() {
     return [
       { slug: 'classic-red-pullover-hoodie' },
       { slug: 'classic-heather-gray-hoodie' },
-      { slug: 'classic-grey-hooded-sweatshirt' }
+      { slug: 'classic-grey-hooded-sweatshirt' },
     ]
   }
 }
@@ -211,10 +221,6 @@ export async function generateMetadata({ params }: ProductPageProps) {
     }
   }
 
-  const price = product.originalPrice
-    ? `${product.originalPrice.toFixed(2)} - ${product.price.toFixed(2)}`
-    : product.price.toFixed(2)
-
   return {
     title: `${product.name} | Loja Premium`,
     description: `${product.description.slice(0, 160)}...`,
@@ -224,17 +230,19 @@ export async function generateMetadata({ params }: ProductPageProps) {
       'eletrônicos',
       'loja online',
       'oferta',
-      'promoção'
+      'promoção',
     ].join(', '),
     openGraph: {
       title: product.name,
       description: product.description,
-      images: [{
-        url: product.images[0],
-        width: 600,
-        height: 600,
-        alt: product.name,
-      }],
+      images: [
+        {
+          url: product.images[0],
+          width: 600,
+          height: 600,
+          alt: product.name,
+        },
+      ],
       type: 'website',
     },
     twitter: {
@@ -255,9 +263,7 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 // Componente de Loading para imagens
 function ImageSkeleton() {
-  return (
-    <div className='aspect-square animate-pulse rounded-lg bg-gray-200' />
-  )
+  return <div className='aspect-square animate-pulse rounded-lg bg-gray-200' />
 }
 
 // Componente otimizado para galeria de imagens
@@ -310,9 +316,7 @@ function ProductStats({ product }: { product: Product }) {
       </div>
       <div className='flex items-center gap-2'>
         <Clock className='h-4 w-4 text-gray-500' />
-        <span className='text-sm text-gray-600'>
-          Atualizado hoje
-        </span>
+        <span className='text-sm text-gray-600'>Atualizado hoje</span>
       </div>
     </div>
   )
@@ -386,10 +390,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star
                     key={i}
-                    className={`h-4 w-4 ${i < Math.floor(product.rating)
+                    className={`h-4 w-4 ${
+                      i < Math.floor(product.rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-gray-300'
-                      }`}
+                    }`}
                   />
                 ))}
               </div>
@@ -414,13 +419,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
               {product.originalPrice && (
                 <Badge variant='destructive' className='text-xs'>
-                  -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
+                  -
+                  {Math.round(
+                    ((product.originalPrice - product.price) /
+                      product.originalPrice) *
+                      100
+                  )}
+                  %
                 </Badge>
               )}
             </div>
 
             {product.originalPrice && (
-              <p className='text-sm text-green-600 font-medium'>
+              <p className='text-sm font-medium text-green-600'>
                 Economia de R${' '}
                 {(product.originalPrice - product.price).toFixed(2)}
               </p>
@@ -432,8 +443,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
           {/* Stock Status */}
           <div className='flex items-center gap-2'>
             <div
-              className={`h-2 w-2 rounded-full ${product.inStock ? 'bg-green-500' : 'bg-red-500'
-                }`}
+              className={`h-2 w-2 rounded-full ${
+                product.inStock ? 'bg-green-500' : 'bg-red-500'
+              }`}
             />
             <span className='text-sm'>
               {product.inStock
@@ -457,8 +469,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                     id: 1,
                     name: product.category,
                     slug: product.category.toLowerCase().replace(/\s+/g, '-'),
-                    image: ''
-                  }
+                    image: '',
+                  },
                 }}
                 size='lg'
                 className='flex-1'
@@ -492,8 +504,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 id: 1,
                 name: product.category,
                 slug: product.category.toLowerCase().replace(/\s+/g, '-'),
-                image: ''
-              }
+                image: '',
+              },
             }}
           />
 
@@ -592,8 +604,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <div className='mt-16'>
           <h2 className='mb-6 text-2xl font-bold'>Produtos Relacionados</h2>
           <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-            {relatedProducts.slice(0, 3).map((relatedProduct) => (
-              <Suspense key={relatedProduct.id} fallback={<ProductCardSkeleton />}>
+            {relatedProducts.slice(0, 3).map(relatedProduct => (
+              <Suspense
+                key={relatedProduct.id}
+                fallback={<ProductCardSkeleton />}
+              >
                 <RelatedProductCard productSlug={relatedProduct.slug} />
               </Suspense>
             ))}
@@ -674,7 +689,7 @@ async function RelatedProductCard({ productSlug }: { productSlug: string }) {
         />
       </div>
       <CardContent className='p-4'>
-        <h3 className='font-semibold line-clamp-2'>{product.name}</h3>
+        <h3 className='line-clamp-2 font-semibold'>{product.name}</h3>
         <div className='mt-2 flex items-center gap-2'>
           <span className='text-lg font-bold text-green-600'>
             R$ {product.price.toFixed(2)}
@@ -686,9 +701,7 @@ async function RelatedProductCard({ productSlug }: { productSlug: string }) {
           )}
         </div>
         <Button asChild className='mt-3 w-full'>
-          <Link href={`/products/${product.slug}`}>
-            Ver Produto
-          </Link>
+          <Link href={`/products/${product.slug}`}>Ver Produto</Link>
         </Button>
       </CardContent>
     </Card>

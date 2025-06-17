@@ -10,41 +10,41 @@ import { MiniCart } from './MiniCart'
 // Variantes de animação seguindo rules.md
 const cartBounce = {
   idle: { scale: 1 },
-  hover: { 
+  hover: {
     scale: 1.05,
-    transition: { duration: 0.2, ease: [0.4, 0.0, 0.2, 1] }
+    transition: { duration: 0.2, ease: [0.4, 0.0, 0.2, 1] },
   },
-  tap: { 
+  tap: {
     scale: 0.95,
-    transition: { duration: 0.1, ease: [0.4, 0.0, 0.2, 1] }
+    transition: { duration: 0.1, ease: [0.4, 0.0, 0.2, 1] },
   },
   shake: {
     x: [0, -2, 2, -2, 2, 0],
-    transition: { duration: 0.4, ease: [0.4, 0.0, 0.2, 1] }
-  }
+    transition: { duration: 0.4, ease: [0.4, 0.0, 0.2, 1] },
+  },
 }
 
 const badgeVariants = {
   hidden: { scale: 0, opacity: 0 },
-  visible: { 
-    scale: 1, 
+  visible: {
+    scale: 1,
     opacity: 1,
-    transition: { 
+    transition: {
       type: 'spring',
       damping: 15,
       stiffness: 500,
-      duration: 0.3
-    }
+      duration: 0.3,
+    },
   },
-  exit: { 
-    scale: 0, 
+  exit: {
+    scale: 0,
     opacity: 0,
-    transition: { duration: 0.2, ease: [0.4, 0.0, 0.2, 1] }
+    transition: { duration: 0.2, ease: [0.4, 0.0, 0.2, 1] },
   },
   pulse: {
     scale: [1, 1.2, 1],
-    transition: { duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }
-  }
+    transition: { duration: 0.3, ease: [0.4, 0.0, 0.2, 1] },
+  },
 }
 
 interface CartIndicatorProps {
@@ -52,7 +52,10 @@ interface CartIndicatorProps {
   showLabel?: boolean
 }
 
-export function CartIndicator({ className, showLabel = false }: CartIndicatorProps) {
+export function CartIndicator({
+  className,
+  showLabel = false,
+}: CartIndicatorProps) {
   const { getTotalItems, toggleCart } = useCartStore()
   const [mounted, setMounted] = useState(false)
   const [previousCount, setPreviousCount] = useState(0)
@@ -94,8 +97,6 @@ export function CartIndicator({ className, showLabel = false }: CartIndicatorPro
     }, 300)
   }
 
-
-
   const handleClick = () => {
     setShowMiniCart(false)
     toggleCart()
@@ -116,7 +117,7 @@ export function CartIndicator({ className, showLabel = false }: CartIndicatorPro
       <button
         className={cn(
           'relative inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors',
-          'hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2',
           'focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
           className
         )}
@@ -129,7 +130,7 @@ export function CartIndicator({ className, showLabel = false }: CartIndicatorPro
   }
 
   return (
-    <div 
+    <div
       className='relative'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -144,14 +145,14 @@ export function CartIndicator({ className, showLabel = false }: CartIndicatorPro
         onClick={handleClick}
         className={cn(
           'relative inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors',
-          'hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2',
           'focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
           className
         )}
         aria-label={`Carrinho de compras${totalItems > 0 ? ` - ${totalItems} ${totalItems === 1 ? 'item' : 'itens'}` : ''}`}
       >
         <ShoppingCart className='h-5 w-5' />
-        
+
         {/* Badge com contador */}
         <AnimatePresence>
           {totalItems > 0 && (
@@ -162,22 +163,21 @@ export function CartIndicator({ className, showLabel = false }: CartIndicatorPro
               animate={['visible', totalItems !== previousCount ? 'pulse' : '']}
               exit='exit'
               className={cn(
-                'absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full',
+                'absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full',
                 'bg-destructive text-destructive-foreground text-xs font-bold',
-                'ring-2 ring-background'
+                'ring-background ring-2'
               )}
             >
               {totalItems > 99 ? '99+' : totalItems}
             </motion.span>
           )}
         </AnimatePresence>
-        
+
         {showLabel && (
           <span className='sr-only'>
-            {totalItems > 0 
-              ? `${totalItems} ${totalItems === 1 ? 'item' : 'itens'} no carrinho` 
-              : 'Carrinho vazio'
-            }
+            {totalItems > 0
+              ? `${totalItems} ${totalItems === 1 ? 'item' : 'itens'} no carrinho`
+              : 'Carrinho vazio'}
           </span>
         )}
       </motion.button>

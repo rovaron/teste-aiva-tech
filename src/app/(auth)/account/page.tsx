@@ -12,8 +12,6 @@ import {
   Heart,
   MapPin,
   CreditCard,
-
-
   LogOut,
   Edit,
 } from 'lucide-react'

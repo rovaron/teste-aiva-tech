@@ -60,7 +60,9 @@ export async function getProductBySlug(slug: string) {
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch product by slug: ${res.status} ${res.statusText}`)
+    throw new Error(
+      `Failed to fetch product by slug: ${res.status} ${res.statusText}`
+    )
   }
 
   return res.json()
@@ -107,7 +109,9 @@ export async function getCategoryBySlug(slug: string) {
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch category by slug: ${res.status} ${res.statusText}`)
+    throw new Error(
+      `Failed to fetch category by slug: ${res.status} ${res.statusText}`
+    )
   }
 
   return res.json()
@@ -122,7 +126,9 @@ export async function getProductsByCategory(categoryId: string) {
   })
 
   if (!res.ok) {
-    throw new Error(`Failed to fetch products by category: ${res.status} ${res.statusText}`)
+    throw new Error(
+      `Failed to fetch products by category: ${res.status} ${res.statusText}`
+    )
   }
 
   return res.json()

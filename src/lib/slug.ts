@@ -8,15 +8,17 @@
  * @returns A URL-friendly slug
  */
 export function generateSlug(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    // Replace spaces and special characters with hyphens
-    .replace(/[\s\W-]+/g, '-')
-    // Remove leading/trailing hyphens
-    .replace(/^-+|-+$/g,'')
-    // Ensure no consecutive hyphens
-    .replace(/-+/g, '-')
+  return (
+    text
+      .toLowerCase()
+      .trim()
+      // Replace spaces and special characters with hyphens
+      .replace(/[\s\W-]+/g, '-')
+      // Remove leading/trailing hyphens
+      .replace(/^-+|-+$/g, '')
+      // Ensure no consecutive hyphens
+      .replace(/-+/g, '-')
+  )
 }
 
 /**
