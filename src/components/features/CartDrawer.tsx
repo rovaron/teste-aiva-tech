@@ -18,7 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { useCartStore } from '@/stores/cart-store'
-import { cn } from '@/lib/utils'
+import { cn, isValidImageUrl } from '@/lib/utils' // Adicionar importação
 
 // Variantes de animação seguindo rules.md
 const overlayVariants = {
@@ -125,7 +125,7 @@ function CartItem({ item, onUpdateQuantity, onRemove }: CartItemProps) {
       {/* Imagem do produto */}
       <div className='relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border'>
         <Image
-          src={item.image || '/placeholder-product.jpg'}
+          src={isValidImageUrl(item.image)} // Aplicar validação
           alt={item.name}
           fill
           className='object-cover'

@@ -1,23 +1,11 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import Image from 'next/image'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-
-import {
-  Smartphone,
-  Laptop,
-  Headphones,
-  Watch,
-  Camera,
-  Gamepad2,
-  Shirt,
-  Home,
-  Book,
-  Dumbbell,
-  Car,
-  Baby,
-} from 'lucide-react'
+import { getCategories } from '@/lib/api'
+import { isValidImageUrl } from '@/lib/utils' // Adicionar importação
 
 export const metadata: Metadata = {
   title: 'Categorias',
@@ -25,121 +13,53 @@ export const metadata: Metadata = {
     'Explore todas as categorias de produtos disponíveis em nossa loja.',
 }
 
-// Mock data - em produção viria de uma API
-const categories = [
-  {
-    id: 1,
-    name: 'Eletrônicos',
-    slug: 'eletronicos',
-    description: 'Smartphones, tablets e acessórios',
-    icon: Smartphone,
-    productCount: 156,
-    featured: true,
-  },
-  {
-    id: 2,
-    name: 'Computadores',
-    slug: 'computadores',
-    description: 'Notebooks, desktops e periféricos',
-    icon: Laptop,
-    productCount: 89,
-    featured: true,
-  },
-  {
-    id: 3,
-    name: 'Áudio',
-    slug: 'audio',
-    description: 'Fones, caixas de som e equipamentos',
-    icon: Headphones,
-    productCount: 67,
-    featured: false,
-  },
-  {
-    id: 4,
-    name: 'Relógios',
-    slug: 'relogios',
-    description: 'Smartwatches e relógios tradicionais',
-    icon: Watch,
-    productCount: 45,
-    featured: false,
-  },
-  {
-    id: 5,
-    name: 'Câmeras',
-    slug: 'cameras',
-    description: 'Câmeras digitais e acessórios',
-    icon: Camera,
-    productCount: 34,
-    featured: false,
-  },
-  {
-    id: 6,
-    name: 'Games',
-    slug: 'games',
-    description: 'Consoles, jogos e acessórios',
-    icon: Gamepad2,
-    productCount: 78,
-    featured: true,
-  },
-  {
-    id: 7,
-    name: 'Moda',
-    slug: 'moda',
-    description: 'Roupas, calçados e acessórios',
-    icon: Shirt,
-    productCount: 234,
-    featured: false,
-  },
-  {
-    id: 8,
-    name: 'Casa & Jardim',
-    slug: 'casa-jardim',
-    description: 'Decoração, móveis e utensílios',
-    icon: Home,
-    productCount: 123,
-    featured: false,
-  },
-  {
-    id: 9,
-    name: 'Livros',
-    slug: 'livros',
-    description: 'Livros físicos e digitais',
-    icon: Book,
-    productCount: 456,
-    featured: false,
-  },
-  {
-    id: 10,
-    name: 'Esportes',
-    slug: 'esportes',
-    description: 'Equipamentos e roupas esportivas',
-    icon: Dumbbell,
-    productCount: 89,
-    featured: false,
-  },
-  {
-    id: 11,
-    name: 'Automotivo',
-    slug: 'automotivo',
-    description: 'Peças e acessórios para veículos',
-    icon: Car,
-    productCount: 67,
-    featured: false,
-  },
-  {
-    id: 12,
-    name: 'Bebês',
-    slug: 'bebes',
-    description: 'Produtos para bebês e crianças',
-    icon: Baby,
-    productCount: 145,
-    featured: false,
-  },
-]
+interface ApiCategory {
+  id: number
+  name: string
+  slug: string
+  image: string
+  creationAt?: string
+  updatedAt?: string
+}
 
-export default function CategoriesPage() {
-  const featuredCategories = categories.filter(cat => cat.featured)
-  const allCategories = categories
+// Transform API category to display format
+const transformApiCategory = (apiCategory: ApiCategory) => {
+  return {
+    id: apiCategory.id,
+    name: apiCategory.name,
+    slug: apiCategory.slug,
+    image: apiCategory.image,
+    description: `Explore produtos da categoria ${apiCategory.name}`,
+  }
+}
+export default async function CategoriesPage() {
+  let categories: ApiCategory[] = []
+  let error: string | null = null
+
+  try {
+    categories = await getCategories()
+  } catch (err) {
+    error = 'Erro ao carregar categorias. Tente novamente mais tarde.'
+    console.error('Error fetching categories:', err)
+  }
+
+  const transformedCategories = categories.map(transformApiCategory)
+
+  if (error) {
+    return (
+      <div className='container py-12'>
+        <div className='mx-auto max-w-4xl text-center'>
+          <h1 className='mb-6 text-4xl font-bold tracking-tight sm:text-5xl'>
+            Categorias
+          </h1>
+          <p className='text-muted-foreground text-lg'>{error}</p>
+          <Button asChild className='mt-6'>
+            <Link href='/'>Voltar ao Início</Link>
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className='container py-12'>
@@ -157,54 +77,8 @@ export default function CategoriesPage() {
         </p>
       </div>
 
-      {/* Featured Categories */}
+      {/* Categories Grid */}
       <div className='mb-16'>
-        <div className='mb-8 flex items-center justify-between'>
-          <div>
-            <h2 className='text-2xl font-bold tracking-tight'>
-              Categorias em Destaque
-            </h2>
-            <p className='text-muted-foreground'>
-              As categorias mais populares da nossa loja
-            </p>
-          </div>
-        </div>
-
-        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
-          {featuredCategories.map(category => {
-            const IconComponent = category.icon
-            return (
-              <Card
-                key={category.id}
-                className='group cursor-pointer transition-all duration-300 hover:shadow-lg'
-              >
-                <CardHeader className='text-center'>
-                  <div className='bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg transition-colors'>
-                    <IconComponent className='h-8 w-8' />
-                  </div>
-                  <h3 className='text-xl font-semibold'>{category.name}</h3>
-                  <p className='text-muted-foreground text-sm'>
-                    {category.description}
-                  </p>
-                </CardHeader>
-                <CardContent className='text-center'>
-                  <p className='text-muted-foreground mb-4 text-sm'>
-                    {category.productCount} produtos disponíveis
-                  </p>
-                  <Button asChild variant='outline' className='w-full'>
-                    <Link href={`/categories/${category.slug}`}>
-                      Ver Produtos
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            )
-          })}
-        </div>
-      </div>
-
-      {/* All Categories */}
-      <div>
         <div className='mb-8'>
           <h2 className='mb-2 text-2xl font-bold tracking-tight'>
             Todas as Categorias
@@ -214,36 +88,43 @@ export default function CategoriesPage() {
           </p>
         </div>
 
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-          {allCategories.map(category => {
-            const IconComponent = category.icon
-            return (
+        {transformedCategories.length === 0 ? (
+          <div className='py-12 text-center'>
+            <p className='text-muted-foreground text-lg'>
+              Nenhuma categoria encontrada.
+            </p>
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            {transformedCategories.map(category => (
               <Link
                 key={category.id}
                 href={`/categories/${category.slug}`}
                 className='group'
               >
-                <Card className='h-full transition-all duration-300 hover:shadow-md'>
+                <Card className='h-full overflow-hidden transition-all duration-300 hover:shadow-lg'>
+                  <div className='relative aspect-video overflow-hidden'>
+                    <Image
+                      src={isValidImageUrl(category.image)} // Aplicar validação
+                      alt={category.name}
+                      fill
+                      className='object-cover transition-transform duration-300 group-hover:scale-105'
+                      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw'
+                    />
+                  </div>
                   <CardContent className='p-6'>
-                    <div className='flex items-center space-x-4'>
-                      <div className='bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground flex h-12 w-12 items-center justify-center rounded-lg transition-colors'>
-                        <IconComponent className='h-6 w-6' />
-                      </div>
-                      <div className='min-w-0 flex-1'>
-                        <h3 className='group-hover:text-primary text-sm font-semibold transition-colors'>
-                          {category.name}
-                        </h3>
-                        <p className='text-muted-foreground text-xs'>
-                          {category.productCount} produtos
-                        </p>
-                      </div>
-                    </div>
+                    <h3 className='group-hover:text-primary mb-2 text-lg font-semibold transition-colors'>
+                      {category.name}
+                    </h3>
+                    <p className='text-muted-foreground text-sm'>
+                      {category.description}
+                    </p>
                   </CardContent>
                 </Card>
               </Link>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* CTA Section */}

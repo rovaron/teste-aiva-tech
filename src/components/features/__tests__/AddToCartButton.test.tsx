@@ -16,13 +16,6 @@ jest.mock('framer-motion', () => ({
     div: ({
       children,
       className,
-      whileHover,
-      whileTap,
-      variants,
-      initial,
-      animate,
-      exit,
-      transition,
       ...props
     }: {
       children: React.ReactNode
@@ -38,13 +31,6 @@ jest.mock('framer-motion', () => ({
     button: ({
       children,
       className,
-      whileHover,
-      whileTap,
-      variants,
-      initial,
-      animate,
-      exit,
-      transition,
       ...props
     }: {
       children: React.ReactNode

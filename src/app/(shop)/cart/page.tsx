@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge'
 
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, Tag } from 'lucide-react'
 import { useCartStore } from '@/stores/cart-store'
+import { isValidImageUrl } from '@/lib/utils' // Adicionar importação
 
 export default function CartPage() {
   const {
@@ -131,7 +132,7 @@ export default function CartPage() {
                 >
                   <div className='relative h-20 w-20 overflow-hidden rounded-md border'>
                     <Image
-                      src={item.image || '/placeholder.jpg'}
+                      src={isValidImageUrl(item.image)} // Aplicar validação
                       alt={item.name}
                       fill
                       className='object-cover'

@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Product } from '@/lib/types'
 import { QuickAddButton } from './AddToCartButton'
+import { isValidImageUrl } from '@/lib/utils' // Adicionar importação
 
 interface ProductGridProps {
   products: Product[]
@@ -55,7 +56,7 @@ function ProductCard({ product }: { product: Product }) {
               className='h-full w-full'
             >
               <Image
-                src={product.images[0]}
+                src={isValidImageUrl(product.images[0])} // Aplicar validação
                 alt={product.title}
                 fill
                 className='object-cover'

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useCartStore } from '@/stores/cart-store'
 import { cn } from '@/lib/utils'
+import { isValidImageUrl } from '@/lib/utils' // Adicionar importação
 
 // Variantes de animação seguindo rules.md
 const dropdownVariants = {
@@ -82,7 +83,7 @@ function MiniCartItem({ item, onUpdateQuantity, onRemove }: MiniCartItemProps) {
       {/* Imagem do produto */}
       <div className='relative h-12 w-12 flex-shrink-0 overflow-hidden rounded border'>
         <Image
-          src={item.image || '/placeholder-product.jpg'}
+          src={isValidImageUrl(item.image)} // Aplicar validação, removendo o placeholder antigo
           alt={item.name}
           fill
           className='object-cover'
