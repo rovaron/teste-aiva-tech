@@ -3,24 +3,26 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { 
-  Smartphone, 
-  Laptop, 
-  Headphones, 
-  Watch, 
-  Camera, 
+
+import {
+  Smartphone,
+  Laptop,
+  Headphones,
+  Watch,
+  Camera,
   Gamepad2,
   Shirt,
   Home,
   Book,
   Dumbbell,
   Car,
-  Baby
+  Baby,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Categorias',
-  description: 'Explore todas as categorias de produtos disponíveis em nossa loja.',
+  description:
+    'Explore todas as categorias de produtos disponíveis em nossa loja.',
 }
 
 // Mock data - em produção viria de uma API
@@ -28,6 +30,7 @@ const categories = [
   {
     id: 1,
     name: 'Eletrônicos',
+    slug: 'eletronicos',
     description: 'Smartphones, tablets e acessórios',
     icon: Smartphone,
     productCount: 156,
@@ -36,6 +39,7 @@ const categories = [
   {
     id: 2,
     name: 'Computadores',
+    slug: 'computadores',
     description: 'Notebooks, desktops e periféricos',
     icon: Laptop,
     productCount: 89,
@@ -44,6 +48,7 @@ const categories = [
   {
     id: 3,
     name: 'Áudio',
+    slug: 'audio',
     description: 'Fones, caixas de som e equipamentos',
     icon: Headphones,
     productCount: 67,
@@ -52,6 +57,7 @@ const categories = [
   {
     id: 4,
     name: 'Relógios',
+    slug: 'relogios',
     description: 'Smartwatches e relógios tradicionais',
     icon: Watch,
     productCount: 45,
@@ -60,6 +66,7 @@ const categories = [
   {
     id: 5,
     name: 'Câmeras',
+    slug: 'cameras',
     description: 'Câmeras digitais e acessórios',
     icon: Camera,
     productCount: 34,
@@ -68,6 +75,7 @@ const categories = [
   {
     id: 6,
     name: 'Games',
+    slug: 'games',
     description: 'Consoles, jogos e acessórios',
     icon: Gamepad2,
     productCount: 78,
@@ -76,6 +84,7 @@ const categories = [
   {
     id: 7,
     name: 'Moda',
+    slug: 'moda',
     description: 'Roupas, calçados e acessórios',
     icon: Shirt,
     productCount: 234,
@@ -84,6 +93,7 @@ const categories = [
   {
     id: 8,
     name: 'Casa & Jardim',
+    slug: 'casa-jardim',
     description: 'Decoração, móveis e utensílios',
     icon: Home,
     productCount: 123,
@@ -92,6 +102,7 @@ const categories = [
   {
     id: 9,
     name: 'Livros',
+    slug: 'livros',
     description: 'Livros físicos e digitais',
     icon: Book,
     productCount: 456,
@@ -100,6 +111,7 @@ const categories = [
   {
     id: 10,
     name: 'Esportes',
+    slug: 'esportes',
     description: 'Equipamentos e roupas esportivas',
     icon: Dumbbell,
     productCount: 89,
@@ -108,6 +120,7 @@ const categories = [
   {
     id: 11,
     name: 'Automotivo',
+    slug: 'automotivo',
     description: 'Peças e acessórios para veículos',
     icon: Car,
     productCount: 67,
@@ -116,6 +129,7 @@ const categories = [
   {
     id: 12,
     name: 'Bebês',
+    slug: 'bebes',
     description: 'Produtos para bebês e crianças',
     icon: Baby,
     productCount: 145,
@@ -128,54 +142,57 @@ export default function CategoriesPage() {
   const allCategories = categories
 
   return (
-    <div className="container py-12">
+    <div className='container py-12'>
       {/* Hero Section */}
-      <div className="mx-auto max-w-4xl text-center mb-16">
-        <Badge variant="outline" className="mb-4">
+      <div className='mx-auto mb-16 max-w-4xl text-center'>
+        <Badge variant='outline' className='mb-4'>
           Categorias
         </Badge>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-6">
-          Explore Nossas <span className="text-primary">Categorias</span>
+        <h1 className='mb-6 text-4xl font-bold tracking-tight sm:text-5xl'>
+          Explore Nossas <span className='text-primary'>Categorias</span>
         </h1>
-        <p className="text-lg text-muted-foreground leading-8">
-          Encontre exatamente o que você procura navegando por nossas categorias 
+        <p className='text-muted-foreground text-lg leading-8'>
+          Encontre exatamente o que você procura navegando por nossas categorias
           organizadas. Temos produtos para todos os gostos e necessidades.
         </p>
       </div>
 
       {/* Featured Categories */}
-      <div className="mb-16">
-        <div className="flex items-center justify-between mb-8">
+      <div className='mb-16'>
+        <div className='mb-8 flex items-center justify-between'>
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">
+            <h2 className='text-2xl font-bold tracking-tight'>
               Categorias em Destaque
             </h2>
-            <p className="text-muted-foreground">
+            <p className='text-muted-foreground'>
               As categorias mais populares da nossa loja
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredCategories.map((category) => {
+        <div className='grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3'>
+          {featuredCategories.map(category => {
             const IconComponent = category.icon
             return (
-              <Card key={category.id} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
-                <CardHeader className="text-center">
-                  <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors mb-4">
-                    <IconComponent className="h-8 w-8" />
+              <Card
+                key={category.id}
+                className='group cursor-pointer transition-all duration-300 hover:shadow-lg'
+              >
+                <CardHeader className='text-center'>
+                  <div className='bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-lg transition-colors'>
+                    <IconComponent className='h-8 w-8' />
                   </div>
-                  <h3 className="text-xl font-semibold">{category.name}</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <h3 className='text-xl font-semibold'>{category.name}</h3>
+                  <p className='text-muted-foreground text-sm'>
                     {category.description}
                   </p>
                 </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-sm text-muted-foreground mb-4">
+                <CardContent className='text-center'>
+                  <p className='text-muted-foreground mb-4 text-sm'>
                     {category.productCount} produtos disponíveis
                   </p>
-                  <Button asChild variant="outline" className="w-full">
-                    <Link href={`/products?category=${category.id}`}>
+                  <Button asChild variant='outline' className='w-full'>
+                    <Link href={`/categories/${category.slug}`}>
                       Ver Produtos
                     </Link>
                   </Button>
@@ -188,35 +205,35 @@ export default function CategoriesPage() {
 
       {/* All Categories */}
       <div>
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold tracking-tight mb-2">
+        <div className='mb-8'>
+          <h2 className='mb-2 text-2xl font-bold tracking-tight'>
             Todas as Categorias
           </h2>
-          <p className="text-muted-foreground">
+          <p className='text-muted-foreground'>
             Navegue por todas as nossas categorias disponíveis
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {allCategories.map((category) => {
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+          {allCategories.map(category => {
             const IconComponent = category.icon
             return (
               <Link
                 key={category.id}
-                href={`/products?category=${category.id}`}
-                className="group"
+                href={`/categories/${category.slug}`}
+                className='group'
               >
-                <Card className="h-full hover:shadow-md transition-all duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                        <IconComponent className="h-6 w-6" />
+                <Card className='h-full transition-all duration-300 hover:shadow-md'>
+                  <CardContent className='p-6'>
+                    <div className='flex items-center space-x-4'>
+                      <div className='bg-primary/10 group-hover:bg-primary group-hover:text-primary-foreground flex h-12 w-12 items-center justify-center rounded-lg transition-colors'>
+                        <IconComponent className='h-6 w-6' />
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">
+                      <div className='min-w-0 flex-1'>
+                        <h3 className='group-hover:text-primary text-sm font-semibold transition-colors'>
                           {category.name}
                         </h3>
-                        <p className="text-xs text-muted-foreground">
+                        <p className='text-muted-foreground text-xs'>
                           {category.productCount} produtos
                         </p>
                       </div>
@@ -230,24 +247,20 @@ export default function CategoriesPage() {
       </div>
 
       {/* CTA Section */}
-      <div className="mt-16 text-center bg-muted/50 rounded-lg p-12">
-        <h2 className="text-2xl font-bold tracking-tight mb-4">
+      <div className='bg-muted/50 mt-16 rounded-lg p-12 text-center'>
+        <h2 className='mb-4 text-2xl font-bold tracking-tight'>
           Não encontrou o que procura?
         </h2>
-        <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-          Entre em contato conosco! Nossa equipe está sempre pronta para ajudar 
+        <p className='text-muted-foreground mx-auto mb-6 max-w-2xl'>
+          Entre em contato conosco! Nossa equipe está sempre pronta para ajudar
           você a encontrar exatamente o que precisa.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className='flex flex-col justify-center gap-4 sm:flex-row'>
           <Button asChild>
-            <Link href="/contact">
-              Fale Conosco
-            </Link>
+            <Link href='/contact'>Fale Conosco</Link>
           </Button>
-          <Button asChild variant="outline">
-            <Link href="/products">
-              Ver Todos os Produtos
-            </Link>
+          <Button asChild variant='outline'>
+            <Link href='/products'>Ver Todos os Produtos</Link>
           </Button>
         </div>
       </div>
