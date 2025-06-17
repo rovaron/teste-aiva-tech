@@ -5,105 +5,142 @@ export const CreateProductSchema = z.object({
   title: z.string().min(1, 'Title is required').max(255, 'Title too long'),
   price: z.number().min(0, 'Price must be positive'),
   description: z.string().min(10, 'Description must be at least 10 characters'),
-  categoryId: z.number().int().positive('Category ID must be a positive integer'),
-  images: z.array(z.string().url('Invalid image URL')).min(1, 'At least one image is required'),
-});
+  categoryId: z
+    .number()
+    .int()
+    .positive('Category ID must be a positive integer'),
+  images: z
+    .array(z.string().url('Invalid image URL'))
+    .min(1, 'At least one image is required'),
+})
 
 export const UpdateProductSchema = CreateProductSchema.partial().extend({
   id: z.number().int().positive('Product ID must be a positive integer'),
-});
+})
 
 export const ProductIdSchema = z.object({
-  id: z.string().transform((val) => {
-    const num = parseInt(val, 10);
+  id: z.string().transform(val => {
+    const num = parseInt(val, 10)
     if (isNaN(num) || num <= 0) {
-      throw new Error('Invalid product ID');
+      throw new Error('Invalid product ID')
     }
-    return num;
+    return num
   }),
-});
+})
 
 // External API Category Schemas
 export const CreateCategorySchema = z.object({
-  name: z.string().min(1, 'Category name is required').max(100, 'Name too long'),
+  name: z
+    .string()
+    .min(1, 'Category name is required')
+    .max(100, 'Name too long'),
   image: z.string().url('Invalid image URL'),
-});
+})
 
 export const UpdateCategorySchema = CreateCategorySchema.partial().extend({
   id: z.number().int().positive('Category ID must be a positive integer'),
-});
+})
 
 export const CategoryIdSchema = z.object({
-  id: z.string().transform((val) => {
-    const num = parseInt(val, 10);
+  id: z.string().transform(val => {
+    const num = parseInt(val, 10)
     if (isNaN(num) || num <= 0) {
-      throw new Error('Invalid category ID');
+      throw new Error('Invalid category ID')
     }
-    return num;
+    return num
   }),
-});
+})
 
 // External API Auth Schemas
 export const LoginSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
-});
+})
 
 export const RegisterSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100, 'Name too long'),
+  name: z
+    .string()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name too long'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
   avatar: z.string().url('Invalid avatar URL').optional(),
-});
+})
 
 // External API Cart Schemas
 export const AddToCartSchema = z.object({
   productId: z.number().int().positive('Product ID must be a positive integer'),
-  quantity: z.number().int().min(1, 'Quantity must be at least 1').max(99, 'Quantity too high'),
-});
+  quantity: z
+    .number()
+    .int()
+    .min(1, 'Quantity must be at least 1')
+    .max(99, 'Quantity too high'),
+})
 
 export const UpdateCartItemSchema = z.object({
   productId: z.number().int().positive('Product ID must be a positive integer'),
-  quantity: z.number().int().min(0, 'Quantity must be non-negative').max(99, 'Quantity too high'),
-});
+  quantity: z
+    .number()
+    .int()
+    .min(0, 'Quantity must be non-negative')
+    .max(99, 'Quantity too high'),
+})
 
 export const RemoveFromCartSchema = z.object({
   productId: z.number().int().positive('Product ID must be a positive integer'),
-});
+})
 
 // External API Search and Filter Schemas
 export const ProductFiltersSchema = z.object({
   title: z.string().optional(),
-  price_min: z.string().transform((val) => {
-    if (!val) return undefined;
-    const num = parseFloat(val);
-    return isNaN(num) ? undefined : num;
-  }).optional(),
-  price_max: z.string().transform((val) => {
-    if (!val) return undefined;
-    const num = parseFloat(val);
-    return isNaN(num) ? undefined : num;
-  }).optional(),
-  categoryId: z.string().transform((val) => {
-    if (!val) return undefined;
-    const num = parseInt(val, 10);
-    return isNaN(num) ? undefined : num;
-  }).optional(),
-  offset: z.string().transform((val) => {
-    if (!val) return undefined;
-    const num = parseInt(val, 10);
-    return isNaN(num) || num < 0 ? undefined : num;
-  }).optional(),
-  limit: z.string().transform((val) => {
-    if (!val) return undefined;
-    const num = parseInt(val, 10);
-    return isNaN(num) || num <= 0 || num > 100 ? undefined : num;
-  }).optional(),
-});
+  price_min: z
+    .string()
+    .transform(val => {
+      if (!val) return undefined
+      const num = parseFloat(val)
+      return isNaN(num) ? undefined : num
+    })
+    .optional(),
+  price_max: z
+    .string()
+    .transform(val => {
+      if (!val) return undefined
+      const num = parseFloat(val)
+      return isNaN(num) ? undefined : num
+    })
+    .optional(),
+  categoryId: z
+    .string()
+    .transform(val => {
+      if (!val) return undefined
+      const num = parseInt(val, 10)
+      return isNaN(num) ? undefined : num
+    })
+    .optional(),
+  offset: z
+    .string()
+    .transform(val => {
+      if (!val) return undefined
+      const num = parseInt(val, 10)
+      return isNaN(num) || num < 0 ? undefined : num
+    })
+    .optional(),
+  limit: z
+    .string()
+    .transform(val => {
+      if (!val) return undefined
+      const num = parseInt(val, 10)
+      return isNaN(num) || num <= 0 || num > 100 ? undefined : num
+    })
+    .optional(),
+})
 
 export const SearchQuerySchema = z.object({
-  query: z.string().min(1, 'Search query is required').max(255, 'Query too long'),
-});
+  query: z
+    .string()
+    .min(1, 'Search query is required')
+    .max(255, 'Query too long'),
+})
 
 // User validations
 export const userSchema = z.object({
@@ -119,23 +156,29 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
 })
 
-export const registerSchema = z.object({
-  name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
-  email: z.string().email('Email inválido'),
-  password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
-  confirmPassword: z.string(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: 'Senhas não coincidem',
-  path: ['confirmPassword'],
-})
+export const registerSchema = z
+  .object({
+    name: z.string().min(2, 'Nome deve ter pelo menos 2 caracteres'),
+    email: z.string().email('Email inválido'),
+    password: z.string().min(6, 'Senha deve ter pelo menos 6 caracteres'),
+    confirmPassword: z.string(),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Senhas não coincidem',
+    path: ['confirmPassword'],
+  })
 
 // Product validations
 export const productSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1, 'Nome é obrigatório'),
-  description: z.string().min(10, 'Descrição deve ter pelo menos 10 caracteres'),
+  description: z
+    .string()
+    .min(10, 'Descrição deve ter pelo menos 10 caracteres'),
   price: z.number().positive('Preço deve ser positivo'),
-  images: z.array(z.string().url()).min(1, 'Pelo menos uma imagem é obrigatória'),
+  images: z
+    .array(z.string().url())
+    .min(1, 'Pelo menos uma imagem é obrigatória'),
   category: z.string().min(1, 'Categoria é obrigatória'),
   stock: z.number().int().min(0, 'Estoque não pode ser negativo'),
   featured: z.boolean().default(false),
@@ -155,7 +198,10 @@ export const categorySchema = z.object({
   parentId: z.string().uuid().optional(),
 })
 
-export const createCategorySchema = categorySchema.omit({ id: true, slug: true })
+export const createCategorySchema = categorySchema.omit({
+  id: true,
+  slug: true,
+})
 export const updateCategorySchema = createCategorySchema.partial()
 
 // Order validations
@@ -179,7 +225,13 @@ export const orderSchema = z.object({
   userId: z.string().uuid(),
   items: z.array(orderItemSchema).min(1, 'Pedido deve ter pelo menos um item'),
   total: z.number().positive('Total deve ser positivo'),
-  status: z.enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+  status: z.enum([
+    'pending',
+    'processing',
+    'shipped',
+    'delivered',
+    'cancelled',
+  ]),
   shippingAddress: addressSchema,
   billingAddress: addressSchema,
 })

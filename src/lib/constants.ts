@@ -2,7 +2,8 @@
 
 export const APP_CONFIG = {
   name: 'Store',
-  description: 'Loja online moderna com Next.js 15, TypeScript e performance otimizada',
+  description:
+    'Loja online moderna com Next.js 15, TypeScript e performance otimizada',
   url: 'https://store.example.com',
   author: 'Store Team',
   social: {
