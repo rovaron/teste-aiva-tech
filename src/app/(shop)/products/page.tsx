@@ -24,7 +24,9 @@ export default async function ProductsPage({
   const resolvedSearchParams = await searchParams
 
   const filters = {
-    categoryId: resolvedSearchParams.category,
+    categoryId: resolvedSearchParams.category
+      ? Number(resolvedSearchParams.category)
+      : undefined,
     title: resolvedSearchParams.search,
     offset: ((Number(resolvedSearchParams.page) || 1) - 1) * 12,
     limit: 12,

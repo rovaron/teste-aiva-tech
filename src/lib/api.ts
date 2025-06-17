@@ -2,9 +2,11 @@ export const API_BASE = 'https://api.escuelajs.co/api/v1'
 
 export interface ProductFilters {
   title?: string
-  price_min?: string
-  price_max?: string
-  categoryId?: string
+  price?: number
+  price_min?: number
+  price_max?: number
+  categoryId?: number
+  categorySlug?: string
   offset?: number
   limit?: number
 }
@@ -101,7 +103,7 @@ export async function getCategory(id: string) {
 }
 
 export async function getCategoryBySlug(slug: string) {
-  const res = await fetch(`${API_BASE}/categories/${slug}`, {
+  const res = await fetch(`${API_BASE}/categories/slug/${slug}`, {
     next: {
       revalidate: 3600,
       tags: [`category-slug-${slug}`],

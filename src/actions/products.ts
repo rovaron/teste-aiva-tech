@@ -12,14 +12,13 @@ import {
   getCategories,
   searchProducts,
   API_BASE,
+  type ProductFilters,
 } from '@/lib/api'
 import { getUserFromAPI, getAccessToken } from './auth'
 // Removed unused import
 import type { Product } from '@/lib/types'
 
-export async function getProductsAction(
-  filters?: Record<string, string | number | boolean>
-) {
+export async function getProductsAction(filters?: Partial<ProductFilters>) {
   try {
     const products = await getProducts(filters)
     return {
@@ -293,7 +292,7 @@ export async function getProductsByCategory(categoryId: string) {
   try {
     const validatedId = ProductIdSchema.parse({ id: categoryId })
     const products = await getProducts({
-      categoryId: validatedId.id.toString(),
+      categoryId: validatedId.id,
     })
     return {
       success: true,

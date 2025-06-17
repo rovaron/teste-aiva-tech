@@ -174,7 +174,7 @@ const getRelatedProducts = async (
 ): Promise<Product[]> => {
   try {
     const products: ApiProduct[] = await getProducts({
-      categoryId: categoryId.toString(),
+      categoryId: categoryId,
       limit: 4,
     })
     return products

@@ -3,30 +3,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import { ProductGrid } from '@/components/features/ProductGrid'
+import { InfiniteProductGrid } from '@/components/features/InfiniteProductGrid'
 import { ProductGridSkeleton } from '@/components/ui/ProductGridSkeleton'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft } from 'lucide-react'
-import { getProducts, getCategories, getCategoryBySlug } from '@/lib/api'
+import { ArrowLeft, Star } from 'lucide-react'
+import { getCategories, getCategoryBySlug } from '@/lib/api'
+import { getFeaturedProductsByCategory } from '@/lib/featured-products'
 import { Product, Category } from '@/lib/types'
-
-interface ApiProduct {
-  id: number
-  title: string
-  slug: string
-  price: number
-  description: string
-  images: string[]
-  category: {
-    id: number
-    name: string
-    image: string
-    slug: string
-  }
-  creationAt: string
-  updatedAt: string
-}
 
 interface CategoryPageProps {
   params: Promise<{
@@ -36,26 +20,6 @@ interface CategoryPageProps {
     page?: string
     sort?: string
   }>
-}
-
-// Transform API product to our Product interface (same as in product page)
-const transformApiProduct = (apiProduct: ApiProduct): Product => {
-  return {
-    id: apiProduct.id,
-    title: apiProduct.title,
-    slug: apiProduct.slug,
-    price: apiProduct.price,
-    description: apiProduct.description,
-    images:
-      apiProduct.images.length > 0
-        ? apiProduct.images
-        : [
-            'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=600&fit=crop',
-          ],
-    category: apiProduct.category,
-    creationAt: apiProduct.creationAt,
-    updatedAt: apiProduct.updatedAt,
-  }
 }
 
 // Fetch category data using slug
@@ -69,21 +33,14 @@ const getCategoryData = async (slug: string): Promise<Category | null> => {
   }
 }
 
-// Fetch products for category
-const getCategoryProducts = async (
-  categoryId: number,
-  page: number = 1
+// Fetch featured products for category
+const getCategoryFeaturedProducts = async (
+  categoryId: number
 ): Promise<Product[]> => {
   try {
-    const offset = (page - 1) * 12
-    const products = await getProducts({
-      categoryId: categoryId.toString(),
-      limit: 12,
-      offset,
-    })
-    return products.map(transformApiProduct)
+    return await getFeaturedProductsByCategory(categoryId, 4)
   } catch (error) {
-    console.error('Error fetching category products:', error)
+    console.error('Error fetching featured products:', error)
     return []
   }
 }
@@ -134,12 +91,8 @@ export async function generateMetadata({
   }
 }
 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: CategoryPageProps) {
+export default async function CategoryPage({ params }: CategoryPageProps) {
   const { slug } = await params
-  const { page = '1' } = await searchParams
 
   const category = await getCategoryData(slug)
 
@@ -147,8 +100,7 @@ export default async function CategoryPage({
     notFound()
   }
 
-  const currentPage = parseInt(page)
-  const products = await getCategoryProducts(category.id, currentPage)
+  const featuredProducts = await getCategoryFeaturedProducts(category.id)
 
   return (
     <div className='container py-8'>
@@ -192,35 +144,31 @@ export default async function CategoryPage({
           </div>
           <div>
             <h1 className='text-3xl font-bold'>{category.name}</h1>
-            <Badge variant='secondary' className='mt-2'>
-              {products.length} produtos
-            </Badge>
+            <div className='mt-2 flex items-center gap-2'>
+              <Badge variant='secondary'>Categoria completa</Badge>
+              {featuredProducts.length > 0 && (
+                <Badge
+                  variant='outline'
+                  className='border-yellow-600 text-yellow-600'
+                >
+                  <Star className='mr-1 h-3 w-3 fill-current' />
+                  {featuredProducts.length} em destaque
+                </Badge>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Products Grid */}
+      {/* Infinite Product Grid with Featured Products */}
       <div className='mb-8'>
-        {products.length > 0 ? (
-          <Suspense fallback={<ProductGridSkeleton />}>
-            <ProductGrid products={products} />
-          </Suspense>
-        ) : (
-          <div className='py-12 text-center'>
-            <h3 className='mb-2 text-lg font-semibold'>
-              Nenhum produto encontrado
-            </h3>
-            <p className='text-muted-foreground mb-4'>
-              Não há produtos disponíveis nesta categoria no momento.
-            </p>
-            <Button asChild>
-              <Link href='/products'>Ver Todos os Produtos</Link>
-            </Button>
-          </div>
-        )}
+        <Suspense fallback={<ProductGridSkeleton />}>
+          <InfiniteProductGrid
+            categoryId={category.id}
+            featuredProducts={featuredProducts}
+          />
+        </Suspense>
       </div>
-
-      {/* Pagination could be added here */}
     </div>
   )
 }
