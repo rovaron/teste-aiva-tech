@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware'
 export interface CartItem {
   id: string
   name: string
+  slug: string
   price: number
   quantity: number
   image?: string
@@ -27,13 +28,13 @@ export const useCartStore = create<CartStore>()(
       items: [],
       isOpen: false,
 
-      addItem: (item) => {
+      addItem: item => {
         const items = get().items
-        const existingItem = items.find((i) => i.id === item.id)
+        const existingItem = items.find(i => i.id === item.id)
 
         if (existingItem) {
           set({
-            items: items.map((i) =>
+            items: items.map(i =>
               i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
             ),
           })
@@ -42,8 +43,8 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
-      removeItem: (id) => {
-        set({ items: get().items.filter((item) => item.id !== id) })
+      removeItem: id => {
+        set({ items: get().items.filter(item => item.id !== id) })
       },
 
       updateQuantity: (id, quantity) => {
@@ -53,7 +54,7 @@ export const useCartStore = create<CartStore>()(
         }
 
         set({
-          items: get().items.map((item) =>
+          items: get().items.map(item =>
             item.id === id ? { ...item, quantity } : item
           ),
         })
@@ -80,7 +81,7 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'cart-storage',
-      partialize: (state) => ({ items: state.items }),
+      partialize: state => ({ items: state.items }),
     }
   )
 )
