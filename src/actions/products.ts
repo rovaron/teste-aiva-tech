@@ -1,13 +1,25 @@
 'use server'
 
 import { revalidateTag, revalidatePath } from 'next/cache'
-import { CreateProductSchema, UpdateProductSchema, ProductIdSchema } from '@/lib/validations'
-import { getProducts, getProduct, getCategories, searchProducts, API_BASE } from '@/lib/api'
+import {
+  CreateProductSchema,
+  UpdateProductSchema,
+  ProductIdSchema,
+} from '@/lib/validations'
+import {
+  getProducts,
+  getProduct,
+  getCategories,
+  searchProducts,
+  API_BASE,
+} from '@/lib/api'
 import { getUserFromAPI, getAccessToken } from './auth'
 // Removed unused import
 import type { Product } from '@/lib/types'
 
-export async function getProductsAction(filters?: Record<string, string | number | boolean>) {
+export async function getProductsAction(
+  filters?: Record<string, string | number | boolean>
+) {
   try {
     const products = await getProducts(filters)
     return {
@@ -18,7 +30,8 @@ export async function getProductsAction(filters?: Record<string, string | number
     console.error('Get products error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch products',
+      error:
+        error instanceof Error ? error.message : 'Failed to fetch products',
       data: null,
     }
   }
@@ -53,7 +66,8 @@ export async function getCategoriesAction() {
     console.error('Get categories error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch categories',
+      error:
+        error instanceof Error ? error.message : 'Failed to fetch categories',
       data: null,
     }
   }
@@ -77,7 +91,8 @@ export async function searchProductsAction(query: string) {
     console.error('Search products error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to search products',
+      error:
+        error instanceof Error ? error.message : 'Failed to search products',
       data: null,
     }
   }
@@ -98,7 +113,7 @@ export async function createProductAction(formData: FormData) {
       price: parseFloat(formData.get('price') as string),
       description: formData.get('description') as string,
       categoryId: parseInt(formData.get('categoryId') as string),
-      images: JSON.parse(formData.get('images') as string || '[]'),
+      images: JSON.parse((formData.get('images') as string) || '[]'),
     }
 
     const validatedData = CreateProductSchema.parse(rawData)
@@ -115,7 +130,7 @@ export async function createProductAction(formData: FormData) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(validatedData),
     })
@@ -143,7 +158,8 @@ export async function createProductAction(formData: FormData) {
     console.error('Create product error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to create product',
+      error:
+        error instanceof Error ? error.message : 'Failed to create product',
     }
   }
 }
@@ -164,7 +180,7 @@ export async function updateProductAction(formData: FormData) {
       price: parseFloat(formData.get('price') as string),
       description: formData.get('description') as string,
       categoryId: parseInt(formData.get('categoryId') as string),
-      images: JSON.parse(formData.get('images') as string || '[]'),
+      images: JSON.parse((formData.get('images') as string) || '[]'),
     }
 
     const validatedData = UpdateProductSchema.parse(rawData)
@@ -182,7 +198,7 @@ export async function updateProductAction(formData: FormData) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(updateData),
     })
@@ -212,7 +228,8 @@ export async function updateProductAction(formData: FormData) {
     console.error('Update product error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to update product',
+      error:
+        error instanceof Error ? error.message : 'Failed to update product',
     }
   }
 }
@@ -241,7 +258,7 @@ export async function deleteProductAction(id: string) {
     const response = await fetch(`${API_BASE}/products/${productId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     })
 
@@ -266,7 +283,8 @@ export async function deleteProductAction(id: string) {
     console.error('Delete product error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to delete product',
+      error:
+        error instanceof Error ? error.message : 'Failed to delete product',
     }
   }
 }
@@ -274,7 +292,9 @@ export async function deleteProductAction(id: string) {
 export async function getProductsByCategory(categoryId: string) {
   try {
     const validatedId = ProductIdSchema.parse({ id: categoryId })
-    const products = await getProducts({ categoryId: validatedId.id.toString() })
+    const products = await getProducts({
+      categoryId: validatedId.id.toString(),
+    })
     return {
       success: true,
       data: products,
@@ -283,7 +303,10 @@ export async function getProductsByCategory(categoryId: string) {
     console.error('Get products by category error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch products by category',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Failed to fetch products by category',
       data: null,
     }
   }
@@ -301,7 +324,10 @@ export async function getFeaturedProducts() {
     console.error('Get featured products error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch featured products',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Failed to fetch featured products',
       data: null,
     }
   }

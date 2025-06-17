@@ -7,11 +7,15 @@ import type { Product, ApiResponse } from '@/types/global'
 // Validation schemas
 const createProductSchema = z.object({
   name: z.string().min(1, 'Nome é obrigatório'),
-  description: z.string().min(10, 'Descrição deve ter pelo menos 10 caracteres'),
+  description: z
+    .string()
+    .min(10, 'Descrição deve ter pelo menos 10 caracteres'),
   price: z.number().positive('Preço deve ser positivo'),
   category: z.string().min(1, 'Categoria é obrigatória'),
   stock: z.number().int().min(0, 'Estoque não pode ser negativo'),
-  images: z.array(z.string().url()).min(1, 'Pelo menos uma imagem é obrigatória'),
+  images: z
+    .array(z.string().url())
+    .min(1, 'Pelo menos uma imagem é obrigatória'),
 })
 
 const updateProductSchema = createProductSchema.partial()
@@ -79,12 +83,16 @@ export async function updateProduct(
       price: formData.get('price') ? Number(formData.get('price')) : undefined,
       category: formData.get('category') as string,
       stock: formData.get('stock') ? Number(formData.get('stock')) : undefined,
-      images: formData.get('images') ? JSON.parse(formData.get('images') as string) : undefined,
+      images: formData.get('images')
+        ? JSON.parse(formData.get('images') as string)
+        : undefined,
     }
 
     // Remove undefined values
     const cleanData = Object.fromEntries(
-      Object.entries(data).filter(([, value]) => value !== undefined && value !== '')
+      Object.entries(data).filter(
+        ([, value]) => value !== undefined && value !== ''
+      )
     )
 
     const validatedData = updateProductSchema.parse(cleanData)

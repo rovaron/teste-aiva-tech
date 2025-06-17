@@ -2,7 +2,11 @@
 
 import { cookies } from 'next/headers'
 import { revalidateTag } from 'next/cache'
-import { AddToCartSchema, UpdateCartItemSchema, RemoveFromCartSchema } from '@/lib/validations'
+import {
+  AddToCartSchema,
+  UpdateCartItemSchema,
+  RemoveFromCartSchema,
+} from '@/lib/validations'
 import { getProduct } from '@/lib/api'
 import type { CartItem } from '@/lib/types'
 
@@ -13,11 +17,11 @@ async function getCartFromCookies(): Promise<CartItem[]> {
   try {
     const cookieStore = await cookies()
     const cartCookie = cookieStore.get(CART_COOKIE_NAME)?.value
-    
+
     if (!cartCookie) {
       return []
     }
-    
+
     return JSON.parse(cartCookie)
   } catch (error) {
     console.error('Error parsing cart from cookies:', error)
@@ -43,8 +47,11 @@ async function saveCartToCookies(cart: CartItem[]) {
 // Helper function to calculate cart totals
 function calculateCartTotals(cart: CartItem[]) {
   const itemCount = cart.reduce((total, item) => total + item.quantity, 0)
-  const total = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0)
-  
+  const total = cart.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  )
+
   return { itemCount, total }
 }
 
@@ -52,7 +59,7 @@ export async function getCartAction() {
   try {
     const cart = await getCartFromCookies()
     const { itemCount, total } = calculateCartTotals(cart)
-    
+
     return {
       success: true,
       data: {
@@ -79,7 +86,7 @@ export async function addToCartAction(formData: FormData) {
     }
 
     const validatedData = AddToCartSchema.parse(rawData)
-    
+
     // Get product details
     const product = await getProduct(validatedData.productId.toString())
     if (!product) {
@@ -90,7 +97,7 @@ export async function addToCartAction(formData: FormData) {
     }
 
     const cart = await getCartFromCookies()
-    
+
     // Check if product already exists in cart
     const existingItemIndex = cart.findIndex(
       item => item.product.id === validatedData.productId
@@ -111,7 +118,7 @@ export async function addToCartAction(formData: FormData) {
     revalidateTag('cart')
 
     const { itemCount, total } = calculateCartTotals(cart)
-    
+
     return {
       success: true,
       data: {
@@ -124,7 +131,8 @@ export async function addToCartAction(formData: FormData) {
     console.error('Add to cart error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to add item to cart',
+      error:
+        error instanceof Error ? error.message : 'Failed to add item to cart',
     }
   }
 }
@@ -138,7 +146,7 @@ export async function updateCartItemAction(formData: FormData) {
 
     const validatedData = UpdateCartItemSchema.parse(rawData)
     const cart = await getCartFromCookies()
-    
+
     const itemIndex = cart.findIndex(
       item => item.product.id === validatedData.productId
     )
@@ -162,7 +170,7 @@ export async function updateCartItemAction(formData: FormData) {
     revalidateTag('cart')
 
     const { itemCount, total } = calculateCartTotals(cart)
-    
+
     return {
       success: true,
       data: {
@@ -175,7 +183,8 @@ export async function updateCartItemAction(formData: FormData) {
     console.error('Update cart item error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to update cart item',
+      error:
+        error instanceof Error ? error.message : 'Failed to update cart item',
     }
   }
 }
@@ -188,7 +197,7 @@ export async function removeFromCartAction(formData: FormData) {
 
     const validatedData = RemoveFromCartSchema.parse(rawData)
     const cart = await getCartFromCookies()
-    
+
     const filteredCart = cart.filter(
       item => item.product.id !== validatedData.productId
     )
@@ -197,7 +206,7 @@ export async function removeFromCartAction(formData: FormData) {
     revalidateTag('cart')
 
     const { itemCount, total } = calculateCartTotals(filteredCart)
-    
+
     return {
       success: true,
       data: {
@@ -210,7 +219,10 @@ export async function removeFromCartAction(formData: FormData) {
     console.error('Remove from cart error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to remove item from cart',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Failed to remove item from cart',
     }
   }
 }
@@ -219,7 +231,7 @@ export async function clearCartAction() {
   try {
     await saveCartToCookies([])
     revalidateTag('cart')
-    
+
     return {
       success: true,
       data: {
@@ -241,7 +253,7 @@ export async function getCartItemCountAction() {
   try {
     const cart = await getCartFromCookies()
     const itemCount = cart.reduce((total, item) => total + item.quantity, 0)
-    
+
     return {
       success: true,
       data: itemCount,
@@ -250,7 +262,10 @@ export async function getCartItemCountAction() {
     console.error('Get cart item count error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to get cart item count',
+      error:
+        error instanceof Error
+          ? error.message
+          : 'Failed to get cart item count',
       data: 0,
     }
   }
@@ -259,8 +274,11 @@ export async function getCartItemCountAction() {
 export async function getCartTotalAction() {
   try {
     const cart = await getCartFromCookies()
-    const total = cart.reduce((total, item) => total + (item.product.price * item.quantity), 0)
-    
+    const total = cart.reduce(
+      (total, item) => total + item.product.price * item.quantity,
+      0
+    )
+
     return {
       success: true,
       data: total,
@@ -269,7 +287,8 @@ export async function getCartTotalAction() {
     console.error('Get cart total error:', error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to get cart total',
+      error:
+        error instanceof Error ? error.message : 'Failed to get cart total',
       data: 0,
     }
   }
