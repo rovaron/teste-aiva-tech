@@ -16,14 +16,29 @@ jest.mock('framer-motion', () => ({
     div: ({
       children,
       className,
-      ...props
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      style,
+      ...motionProps
     }: {
       children: React.ReactNode
       className?: string
+      onClick?: () => void
+      onMouseEnter?: () => void
+      onMouseLeave?: () => void
+      style?: React.CSSProperties
       [key: string]: unknown
     }) => {
+      // Filter out motion-specific props to avoid React warnings
       return (
-        <div className={className} {...props}>
+        <div
+          className={className}
+          onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          style={style}
+        >
           {children}
         </div>
       )
@@ -31,14 +46,35 @@ jest.mock('framer-motion', () => ({
     button: ({
       children,
       className,
-      ...props
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
+      style,
+      disabled,
+      type,
+      ...motionProps
     }: {
       children: React.ReactNode
       className?: string
+      onClick?: () => void
+      onMouseEnter?: () => void
+      onMouseLeave?: () => void
+      style?: React.CSSProperties
+      disabled?: boolean
+      type?: 'button' | 'submit' | 'reset'
       [key: string]: unknown
     }) => {
+      // Filter out motion-specific props to avoid React warnings
       return (
-        <button className={className} {...props}>
+        <button
+          className={className}
+          onClick={onClick}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
+          style={style}
+          disabled={disabled}
+          type={type}
+        >
           {children}
         </button>
       )
