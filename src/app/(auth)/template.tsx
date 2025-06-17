@@ -17,7 +17,7 @@ export default function AuthTemplate({ children }: AuthTemplateProps) {
         stiffness: 300,
         damping: 30,
       }}
-      className="w-full"
+      className='w-full'
     >
       {children}
     </motion.div>

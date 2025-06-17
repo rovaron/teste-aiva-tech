@@ -5,7 +5,8 @@ export const metadata: Metadata = {
     template: '%s | Loja',
     default: 'Loja',
   },
-  description: 'Descubra nossos produtos incríveis com a melhor qualidade e preços.',
+  description:
+    'Descubra nossos produtos incríveis com a melhor qualidade e preços.',
 }
 
 interface ShopLayoutProps {
@@ -13,9 +14,5 @@ interface ShopLayoutProps {
 }
 
 export default function ShopLayout({ children }: ShopLayoutProps) {
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>
 }

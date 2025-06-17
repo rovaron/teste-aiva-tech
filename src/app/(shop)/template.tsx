@@ -17,7 +17,7 @@ export default function ShopTemplate({ children }: ShopTemplateProps) {
         stiffness: 260,
         damping: 20,
       }}
-      className="w-full"
+      className='w-full'
     >
       {children}
     </motion.div>
