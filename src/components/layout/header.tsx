@@ -1,13 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { Search, Menu, User, LogOut } from 'lucide-react'
+import { Menu, User, LogOut, Search } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useUIStore } from '@/stores/ui-store'
 import { logout } from '@/actions/auth'
 import { useEffect, useState } from 'react'
 import { CartDrawer } from '@/components/features/CartDrawer'
 import { CartIndicator } from '@/components/features/CartIndicator'
+import { ProductSearch } from '@/components/features/ProductSearch'
+import { MobileProductSearch } from '@/components/features/MobileProductSearch'
 
 interface User {
   id: number
@@ -18,9 +20,10 @@ interface User {
 }
 
 export function Header() {
-  const { toggleSidebar, searchQuery, setSearchQuery } = useUIStore()
+  const { toggleSidebar } = useUIStore()
   const [user, setUser] = useState<User | null>(null)
   const [_isLoading, setIsLoading] = useState(true)
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
   useEffect(() => {
     // Verificar se há usuário logado através da API
@@ -99,21 +102,21 @@ export function Header() {
         </nav>
 
         {/* Search Bar */}
-        <div className='mx-4 hidden max-w-sm flex-1 items-center space-x-2 md:flex'>
-          <div className='relative w-full'>
-            <Search className='text-muted-foreground absolute top-2.5 left-2 h-4 w-4' />
-            <input
-              type='search'
-              placeholder='Buscar produtos...'
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className='border-input bg-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-8 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-1 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50'
-            />
-          </div>
+        <div className='mx-4 hidden max-w-sm flex-1 md:flex'>
+          <ProductSearch className='w-full' />
         </div>
 
         {/* Actions */}
         <div className='flex items-center space-x-2'>
+          {/* Mobile Search Button */}
+          <button
+            onClick={() => setIsMobileSearchOpen(true)}
+            className='focus-visible:ring-ring ring-offset-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 md:hidden'
+          >
+            <Search className='h-5 w-5' />
+            <span className='sr-only'>Buscar</span>
+          </button>
+
           <ThemeToggle />
 
           <CartIndicator showLabel />
@@ -152,6 +155,12 @@ export function Header() {
 
       {/* Cart Drawer */}
       <CartDrawer />
+      
+      {/* Mobile Search */}
+      <MobileProductSearch 
+        isOpen={isMobileSearchOpen} 
+        onClose={() => setIsMobileSearchOpen(false)} 
+      />
     </header>
   )
 }

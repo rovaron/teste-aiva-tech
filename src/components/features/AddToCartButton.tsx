@@ -58,6 +58,7 @@ export function AddToCartButton({
   const { addItem, toggleCart: _toggleCart } = useCartStore()
 
   const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault()
     e.stopPropagation()
     if (isPending || isSuccess) return
 

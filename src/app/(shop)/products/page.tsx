@@ -1,7 +1,7 @@
-import { getProducts, getCategories } from '@/lib/api'
 import { ProductGrid } from '@/components/features/ProductGrid'
 import { ProductFilters } from '@/components/features/ProductFilters'
 import { ProductGridSkeleton } from '@/components/ui/ProductGridSkeleton'
+import { getProducts, getCategories } from '@/lib/api'
 import { Suspense } from 'react'
 
 interface SearchParams {
