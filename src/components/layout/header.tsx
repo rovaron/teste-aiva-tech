@@ -5,7 +5,7 @@ import { Menu, User, LogOut, Search } from 'lucide-react'
 import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { useUIStore } from '@/stores/ui-store'
 import { logout } from '@/actions/auth'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { CartDrawer } from '@/components/features/CartDrawer'
 import { CartIndicator } from '@/components/features/CartIndicator'
 import { ProductSearch } from '@/components/features/ProductSearch'
@@ -103,7 +103,9 @@ export function Header() {
 
         {/* Search Bar */}
         <div className='mx-4 hidden max-w-sm flex-1 md:flex'>
-          <ProductSearch className='w-full' />
+          <Suspense fallback={<div className='h-10 w-full animate-pulse rounded-md bg-muted' />}>
+            <ProductSearch className='w-full' />
+          </Suspense>
         </div>
 
         {/* Actions */}
@@ -157,10 +159,12 @@ export function Header() {
       <CartDrawer />
       
       {/* Mobile Search */}
-      <MobileProductSearch 
-        isOpen={isMobileSearchOpen} 
-        onClose={() => setIsMobileSearchOpen(false)} 
-      />
+      <Suspense fallback={null}>
+        <MobileProductSearch 
+          isOpen={isMobileSearchOpen} 
+          onClose={() => setIsMobileSearchOpen(false)} 
+        />
+      </Suspense>
     </header>
   )
 }

@@ -42,7 +42,9 @@ export default async function ProductsPage({
     <div className='container mx-auto px-4 py-8'>
       <div className='flex gap-8'>
         <aside className='w-64'>
-          <ProductFilters categories={categories} />
+          <Suspense fallback={<div className='h-32 w-full animate-pulse rounded-md bg-muted' />}>
+            <ProductFilters categories={categories} />
+          </Suspense>
         </aside>
 
         <main className='flex-1'>
