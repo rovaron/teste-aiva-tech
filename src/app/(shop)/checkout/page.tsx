@@ -14,7 +14,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { Badge } from '@/components/ui/badge'
 import {
   Select,
   SelectContent,
@@ -27,9 +26,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import {
   CreditCard,
   MapPin,
-  User,
   Mail,
-  Phone,
   ArrowLeft,
   CheckCircle,
   ShoppingBag,

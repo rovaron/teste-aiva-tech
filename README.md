@@ -14,6 +14,125 @@ Uma plataforma de e-commerce moderna construída com Next.js 15, TypeScript e fo
 - **Sonner** - Notificações toast
 - **next-themes** - Sistema de temas
 
+## 🤔 Decisões Técnicas
+
+### Por que Next.js ao invés de Vite?
+
+#### Vantagens do Next.js para E-commerce
+
+**1. SEO e Performance Nativa**
+- **Server-Side Rendering (SSR)**: Páginas de produtos renderizadas no servidor para melhor SEO
+- **Static Site Generation (SSG)**: Catálogo de produtos gerado estaticamente para máxima performance
+- **Incremental Static Regeneration (ISR)**: Atualização automática de produtos sem rebuild completo
+- **Image Optimization**: Otimização automática de imagens de produtos (WebP, AVIF, lazy loading)
+
+**2. Funcionalidades E-commerce Específicas**
+- **API Routes**: Backend integrado para checkout, pagamentos e webhooks
+- **Middleware**: Autenticação, redirects e proteção de rotas administrativas
+- **Server Actions**: Formulários e mutações sem JavaScript no cliente
+- **Edge Runtime**: Funções serverless para APIs de alta performance
+
+**3. Ecossistema e Produção**
+- **Vercel Integration**: Deploy otimizado com CDN global
+- **Analytics**: Core Web Vitals e métricas de e-commerce integradas
+- **Monitoring**: Error tracking e performance monitoring nativo
+- **Scaling**: Auto-scaling baseado em demanda
+
+#### Limitações do Vite para E-commerce
+
+**1. SEO Challenges**
+- SPA por padrão, requer configuração complexa para SSR
+- Meta tags dinâmicas mais difíceis de implementar
+- Structured data e Open Graph requerem soluções adicionais
+
+**2. Backend Separation**
+- Necessita backend separado (Express, Fastify, etc.)
+- Complexidade adicional para deploy e manutenção
+- Latência entre frontend e backend
+
+**3. E-commerce Features**
+- Sem otimizações nativas para e-commerce
+- Cache strategies manuais
+- Image optimization requer plugins externos
+
+### Estratégia de Geração Estática
+
+#### Produtos Estáticos (SSG)
+
+```typescript
+// Geração estática de páginas de produtos
+export async function generateStaticParams() {
+  const products = await getProducts()
+  return products.map(product => ({ id: product.id }))
+}
+
+// Revalidação incremental
+export const revalidate = 3600 // 1 hora
+```
+
+**Benefícios:**
+- **Performance**: Páginas servidas diretamente do CDN
+- **SEO**: HTML completo disponível para crawlers
+- **Costs**: Redução de custos de servidor
+- **Reliability**: Funciona mesmo com API offline
+
+#### Catálogo Dinâmico (ISR)
+
+```typescript
+// Revalidação sob demanda
+export async function revalidateProduct(productId: string) {
+  await revalidatePath(`/products/${productId}`)
+  await revalidateTag('products')
+}
+```
+
+**Vantagens:**
+- **Fresh Content**: Produtos sempre atualizados
+- **Performance**: Primeira visita serve versão cached
+- **Flexibility**: Atualização sem rebuild completo
+
+#### Páginas Administrativas (SSR)
+
+```typescript
+// Renderização no servidor para dados sensíveis
+export default async function AdminPage() {
+  const products = await getProductsAdmin()
+  return <AdminDashboard products={products} />
+}
+```
+
+**Justificativas:**
+- **Security**: Dados sensíveis não expostos no cliente
+- **Real-time**: Informações sempre atualizadas
+- **Authentication**: Verificação de permissões no servidor
+
+### Arquitetura de Cache
+
+#### Multi-layer Caching
+
+1. **CDN Level**: Vercel Edge Network
+2. **Server Level**: Next.js Data Cache
+3. **Database Level**: Redis para sessões
+4. **Client Level**: React Query para estado servidor
+
+#### Cache Invalidation Strategy
+
+```typescript
+// Invalidação inteligente por tags
+const CACHE_TAGS = {
+  products: 'products',
+  categories: 'categories',
+  user: (id: string) => `user-${id}`,
+}
+
+// Revalidação automática em mutations
+export async function updateProduct(id: string, data: ProductData) {
+  const result = await updateProductAPI(id, data)
+  revalidateTag(CACHE_TAGS.products)
+  return result
+}
+```
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -188,12 +307,13 @@ O projeto está otimizado para deploy em:
 - **AWS Amplify**
 - **Docker**
 
-## 📈 Performance Metrics
+## ⚠️ Observações sobre a API
 
-- **Lighthouse Score**: 95+ em todas as métricas
-- **Core Web Vitals**: Otimizado
-- **Bundle Size**: Minimizado com tree-shaking
-- **Loading Speed**: < 2s First Contentful Paint
+A partir das 20h de hoje, foi observado um comportamento estranho na API externa utilizada no projeto. Durante o desenvolvimento do CRUD e páginas administrativas, os produtos e usuários estavam sendo resetados frequentemente, o que atrapalhou significativamente o progresso.
+
+Devido a essa instabilidade da API (que afetou até mesmo os dados inseridos manualmente), foi necessário reverter para um commit anterior do dia, onde o CRUD administrativo ainda não havia sido implementado.
+
+**Status atual**: O projeto está em um estado estável anterior à implementação completa do painel administrativo.
 
 ---
 

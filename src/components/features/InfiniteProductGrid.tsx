@@ -221,7 +221,7 @@ export function InfiniteProductGrid({
   // Load initial products
   useEffect(() => {
     loadProducts(1, true)
-  }, [categoryId])
+  }, [categoryId, loadProducts])
 
   // Load more when in view
   useEffect(() => {
