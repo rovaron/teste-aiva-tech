@@ -26,18 +26,6 @@ Uma plataforma de e-commerce moderna construída com Next.js 15, TypeScript e fo
 - **Incremental Static Regeneration (ISR)**: Atualização automática de produtos sem rebuild completo
 - **Image Optimization**: Otimização automática de imagens de produtos (WebP, AVIF, lazy loading)
 
-**2. Funcionalidades E-commerce Específicas**
-- **API Routes**: Backend integrado para checkout, pagamentos e webhooks
-- **Middleware**: Autenticação, redirects e proteção de rotas administrativas
-- **Server Actions**: Formulários e mutações sem JavaScript no cliente
-- **Edge Runtime**: Funções serverless para APIs de alta performance
-
-**3. Ecossistema e Produção**
-- **Vercel Integration**: Deploy otimizado com CDN global
-- **Analytics**: Core Web Vitals e métricas de e-commerce integradas
-- **Monitoring**: Error tracking e performance monitoring nativo
-- **Scaling**: Auto-scaling baseado em demanda
-
 #### Limitações do Vite para E-commerce
 
 **1. SEO Challenges**
@@ -112,26 +100,8 @@ export default async function AdminPage() {
 
 1. **CDN Level**: Vercel Edge Network
 2. **Server Level**: Next.js Data Cache
-3. **Database Level**: Redis para sessões
 4. **Client Level**: React Query para estado servidor
 
-#### Cache Invalidation Strategy
-
-```typescript
-// Invalidação inteligente por tags
-const CACHE_TAGS = {
-  products: 'products',
-  categories: 'categories',
-  user: (id: string) => `user-${id}`,
-}
-
-// Revalidação automática em mutations
-export async function updateProduct(id: string, data: ProductData) {
-  const result = await updateProductAPI(id, data)
-  revalidateTag(CACHE_TAGS.products)
-  return result
-}
-```
 
 ## 📁 Estrutura do Projeto
 
@@ -189,7 +159,6 @@ src/
 - **Image Optimization**: AVIF/WebP automático
 - **Bundle Optimization**: Code splitting otimizado
 - **Turbopack**: Build system ultra-rápido
-- **Experimental Features**: Package imports otimizados
 
 ### Cache Strategies
 
@@ -203,7 +172,6 @@ src/
 O projeto inclui um sistema completo de temas dark/light:
 
 - **next-themes**: Gerenciamento de temas
-- **CSS Variables**: Cores dinâmicas
 - **System Preference**: Detecção automática
 - **Persistência**: Estado salvo no localStorage
 
@@ -297,15 +265,6 @@ npm run start
 # Linting
 npm run lint
 ```
-
-## 🚀 Deploy
-
-O projeto está otimizado para deploy em:
-
-- **Vercel** (recomendado)
-- **Netlify**
-- **AWS Amplify**
-- **Docker**
 
 ## ⚠️ Observações sobre a API
 
