@@ -208,7 +208,7 @@ export function MobileProductSearch({ isOpen, onClose }: MobileProductSearchProp
                     }}
                     className="w-full p-3 text-sm text-primary hover:bg-accent hover:text-accent-foreground rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
-                    Ver todos os resultados para "{inputValue}"
+                    Ver todos os resultados para &quot;{inputValue}&quot;
                   </button>
                 </div>
               )}
