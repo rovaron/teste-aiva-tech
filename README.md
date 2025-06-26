@@ -1,3 +1,5 @@
+[prévia da loja](https://teste-aiva-tech.vercel.app/)
+
 # Store - Next.js 15 E-commerce Platform
 
 Uma plataforma de e-commerce moderna construída com Next.js 15, TypeScript e focada em performance nativa.
